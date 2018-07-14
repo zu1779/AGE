@@ -31,6 +31,10 @@
             // 
             // MainService
             // 
+            this.CanHandlePowerEvent = true;
+            this.CanHandleSessionChangeEvent = true;
+            this.CanPauseAndContinue = true;
+            this.CanShutdown = true;
             this.ServiceName = "Zu1779.AGE";
 
         }

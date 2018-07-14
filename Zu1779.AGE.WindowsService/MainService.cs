@@ -36,6 +36,8 @@
 
         public MainService()
         {
+            log4net.Config.XmlConfigurator.Configure();
+
             InitializeComponent();
         }
 
@@ -53,7 +55,7 @@
         {
             setServiceStatus(ServiceState.SERVICE_START_PENDING);
 
-            log.Info($"{nameof(MainService)}.{nameof(OnStart)} - {nameof(args)}={JsonConvert.SerializeObject(args)}");
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnStart)} - {nameof(args)}={JsonConvert.SerializeObject(args)}"));
 
             setServiceStatus(ServiceState.SERVICE_RUNNING);
         }
@@ -62,7 +64,7 @@
         {
             setServiceStatus(ServiceState.SERVICE_PAUSE_PENDING);
 
-            log.Info($"{nameof(MainService)}.{nameof(OnPause)}");
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnPause)}"));
 
             setServiceStatus(ServiceState.SERVICE_PAUSED);
         }
@@ -71,39 +73,39 @@
         {
             setServiceStatus(ServiceState.SERVICE_CONTINUE_PENDING);
 
-            log.Info($"{nameof(MainService)}.{nameof(OnContinue)}");
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnContinue)}"));
 
             setServiceStatus(ServiceState.SERVICE_RUNNING);
         }
 
         protected override void OnCustomCommand(int command)
         {
-            log.Info($"{nameof(MainService)}.{nameof(OnCustomCommand)} - {nameof(command)}={command}");
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnCustomCommand)} - {nameof(command)}={command}"));
         }
 
         protected override void OnStop()
         {
             setServiceStatus(ServiceState.SERVICE_STOP_PENDING);
 
-            log.Info($"{nameof(MainService)}.{nameof(OnStop)}");
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnStop)}"));
 
             setServiceStatus(ServiceState.SERVICE_STOPPED);
         }
 
         protected override void OnSessionChange(SessionChangeDescription changeDescription)
         {
-            log.Info($"{nameof(MainService)}.{nameof(OnSessionChange)} - {nameof(changeDescription)}={JsonConvert.SerializeObject(changeDescription)}");
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnSessionChange)} - {nameof(changeDescription)}={JsonConvert.SerializeObject(changeDescription)}"));
         }
 
         protected override bool OnPowerEvent(PowerBroadcastStatus powerStatus)
         {
-            log.Info($"{nameof(MainService)}.{nameof(OnPowerEvent)} - {nameof(powerStatus)}={powerStatus}");
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnPowerEvent)} - {nameof(powerStatus)}={powerStatus}"));
             return true;
         }
 
         protected override void OnShutdown()
         {
-            log.Info($"{nameof(MainService)}.{nameof(OnShutdown)}");
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnShutdown)}"));
         }
     }
 }
