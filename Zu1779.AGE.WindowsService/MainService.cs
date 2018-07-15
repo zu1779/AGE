@@ -2,10 +2,13 @@
 {
     using System;
     using System.Runtime.InteropServices;
+    using System.ServiceModel;
     using System.ServiceProcess;
 
     using Common.Logging;
     using Newtonsoft.Json;
+
+    using Zu1779.AGE.Wcf;
 
     public enum ServiceState
     {
@@ -40,7 +43,9 @@
 
             InitializeComponent();
         }
+        private ServiceHost serviceHost;
 
+        #region ServiceStatus Extended
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
         private const int SERVICE_WAIT = 60000;
@@ -50,32 +55,35 @@
             ServiceStatus serviceStatus = new ServiceStatus { dwCurrentState = serviceState, dwWaitHint = SERVICE_WAIT };
             SetServiceStatus(ServiceHandle, ref serviceStatus);
         }
+        #endregion
 
         protected override void OnStart(string[] args)
         {
             setServiceStatus(ServiceState.SERVICE_START_PENDING);
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnStart)} ({nameof(ServiceState.SERVICE_START_PENDING)}) - {nameof(args)}={JsonConvert.SerializeObject(args)}"));
 
-            log.Info(c => c($"{nameof(MainService)}.{nameof(OnStart)} - {nameof(args)}={JsonConvert.SerializeObject(args)}"));
+            startWcfInterface();
 
             setServiceStatus(ServiceState.SERVICE_RUNNING);
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnStart)} ({nameof(ServiceState.SERVICE_RUNNING)}) - {nameof(args)}={JsonConvert.SerializeObject(args)}"));
         }
 
         protected override void OnPause()
         {
             setServiceStatus(ServiceState.SERVICE_PAUSE_PENDING);
-
-            log.Info(c => c($"{nameof(MainService)}.{nameof(OnPause)}"));
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnPause)} ({nameof(ServiceState.SERVICE_PAUSE_PENDING)})"));
 
             setServiceStatus(ServiceState.SERVICE_PAUSED);
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnPause)} ({nameof(ServiceState.SERVICE_PAUSED)})"));
         }
 
         protected override void OnContinue()
         {
             setServiceStatus(ServiceState.SERVICE_CONTINUE_PENDING);
-
-            log.Info(c => c($"{nameof(MainService)}.{nameof(OnContinue)}"));
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnContinue)} ({nameof(ServiceState.SERVICE_CONTINUE_PENDING)})"));
 
             setServiceStatus(ServiceState.SERVICE_RUNNING);
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnContinue)} ({nameof(ServiceState.SERVICE_RUNNING)})"));
         }
 
         protected override void OnCustomCommand(int command)
@@ -86,10 +94,12 @@
         protected override void OnStop()
         {
             setServiceStatus(ServiceState.SERVICE_STOP_PENDING);
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnStop)} ({nameof(ServiceState.SERVICE_STOP_PENDING)})"));
 
-            log.Info(c => c($"{nameof(MainService)}.{nameof(OnStop)}"));
+            stopWcfInterface();
 
             setServiceStatus(ServiceState.SERVICE_STOPPED);
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnStop)} ({nameof(ServiceState.SERVICE_STOPPED)})"));
         }
 
         protected override void OnSessionChange(SessionChangeDescription changeDescription)
@@ -106,6 +116,25 @@
         protected override void OnShutdown()
         {
             log.Info(c => c($"{nameof(MainService)}.{nameof(OnShutdown)}"));
+        }
+
+        protected void startWcfInterface()
+        {
+            log.Info($"Starting WCF Interface");
+            serviceHost = new ServiceHost(typeof(AgeWcfService));
+            serviceHost.Open();
+            log.Info($"Started WCF Interface");
+        }
+
+        protected void stopWcfInterface()
+        {
+            log.Info($"Stopping WCF Interface");
+            if (serviceHost != null)
+            {
+                serviceHost.Close();
+                serviceHost = null;
+            }
+            log.Info($"Stopped WCF Interface");
         }
     }
 }

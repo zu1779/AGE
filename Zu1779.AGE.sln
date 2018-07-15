@@ -7,7 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{96EF48
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.WindowsService", "Zu1779.AGE.WindowsService\Zu1779.AGE.WindowsService.csproj", "{F5AC0F98-FE2F-41D1-AC97-C4F748405BC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.MainEngine", "Zu1779.AGE.MainEngine\Zu1779.AGE.MainEngine.csproj", "{2E25D648-1E06-4607-9BDF-BADA15409DA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zu1779.AGE.MainEngine", "Zu1779.AGE.MainEngine\Zu1779.AGE.MainEngine.csproj", "{2E25D648-1E06-4607-9BDF-BADA15409DA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.Wcf", "Zu1779.AGE.Wcf\Zu1779.AGE.Wcf.csproj", "{6BFAA397-01BB-4CFB-819C-D32A6125910E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{2E25D648-1E06-4607-9BDF-BADA15409DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E25D648-1E06-4607-9BDF-BADA15409DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E25D648-1E06-4607-9BDF-BADA15409DA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BFAA397-01BB-4CFB-819C-D32A6125910E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BFAA397-01BB-4CFB-819C-D32A6125910E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BFAA397-01BB-4CFB-819C-D32A6125910E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BFAA397-01BB-4CFB-819C-D32A6125910E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +36,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F5AC0F98-FE2F-41D1-AC97-C4F748405BC2} = {96EF4836-ED69-449F-892C-7F7BD2110F97}
 		{2E25D648-1E06-4607-9BDF-BADA15409DA3} = {96EF4836-ED69-449F-892C-7F7BD2110F97}
+		{6BFAA397-01BB-4CFB-819C-D32A6125910E} = {96EF4836-ED69-449F-892C-7F7BD2110F97}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F31017-3F06-40D6-A3B9-A784AD546E9B}
