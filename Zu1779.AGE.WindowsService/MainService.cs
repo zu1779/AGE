@@ -8,6 +8,7 @@
     using Common.Logging;
     using Newtonsoft.Json;
 
+    using Zu1779.AGE.MainEngine;
     using Zu1779.AGE.Wcf;
 
     public enum ServiceState
@@ -41,9 +42,15 @@
         {
             log4net.Config.XmlConfigurator.Configure();
 
+            AppDomain.CurrentDomain.UnhandledException += (sender, evargs) =>
+            {
+                log.Fatal(c => c($"UnhandledException"), (Exception)evargs.ExceptionObject);
+            };
+
             InitializeComponent();
         }
         private ServiceHost serviceHost;
+        private EngineManager engineManager;
 
         #region ServiceStatus Extended
         [DllImport("advapi32.dll", SetLastError = true)]
@@ -62,6 +69,7 @@
             setServiceStatus(ServiceState.SERVICE_START_PENDING);
             log.Info(c => c($"{nameof(MainService)}.{nameof(OnStart)} ({nameof(ServiceState.SERVICE_START_PENDING)}) - {nameof(args)}={JsonConvert.SerializeObject(args)}"));
 
+            startEngine();
             startWcfInterface();
 
             setServiceStatus(ServiceState.SERVICE_RUNNING);
@@ -97,6 +105,7 @@
             log.Info(c => c($"{nameof(MainService)}.{nameof(OnStop)} ({nameof(ServiceState.SERVICE_STOP_PENDING)})"));
 
             stopWcfInterface();
+            stopEngine();
 
             setServiceStatus(ServiceState.SERVICE_STOPPED);
             log.Info(c => c($"{nameof(MainService)}.{nameof(OnStop)} ({nameof(ServiceState.SERVICE_STOPPED)})"));
@@ -118,15 +127,34 @@
             log.Info(c => c($"{nameof(MainService)}.{nameof(OnShutdown)}"));
         }
 
-        protected void startWcfInterface()
+        protected void startEngine()
+        {
+            log.Info($"Begin {nameof(startEngine)}");
+
+            engineManager = new EngineManager();
+
+            log.Info($"End {nameof(startEngine)}");
+        }
+
+        private void stopEngine()
+        {
+            log.Info($"Begin {nameof(stopEngine)}");
+
+            engineManager.Dispose();
+
+            log.Info($"End {nameof(stopEngine)}");
+        }
+
+        private void startWcfInterface()
         {
             log.Info($"Starting WCF Interface");
-            serviceHost = new ServiceHost(typeof(AgeWcfService));
+            var ageWcfService = new AgeWcfService(engineManager);
+            serviceHost = new ServiceHost(ageWcfService);
             serviceHost.Open();
             log.Info($"Started WCF Interface");
         }
 
-        protected void stopWcfInterface()
+        private void stopWcfInterface()
         {
             log.Info($"Stopping WCF Interface");
             if (serviceHost != null)
