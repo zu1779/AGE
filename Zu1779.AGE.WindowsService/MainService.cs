@@ -104,7 +104,7 @@
 
         protected override void OnSessionChange(SessionChangeDescription changeDescription)
         {
-            log.Info(c => c($"{nameof(MainService)}.{nameof(OnSessionChange)} - {nameof(changeDescription)}={JsonConvert.SerializeObject(changeDescription)}"));
+            log.Info(c => c($"{nameof(MainService)}.{nameof(OnSessionChange)} - {nameof(changeDescription.Reason)}={changeDescription.Reason}, {nameof(changeDescription.SessionId)}={changeDescription.SessionId}"));
         }
 
         protected override bool OnPowerEvent(PowerBroadcastStatus powerStatus)
