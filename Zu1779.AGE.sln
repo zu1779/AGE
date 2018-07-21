@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.Wcf", "Zu1779.AG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.TestServerConsoleApp", "Zu1779.AGE.TestServerConsoleApp\Zu1779.AGE.TestServerConsoleApp.csproj", "{FECA446C-430E-4D5B-8EAA-407E395D3133}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{7B4DD188-5A80-4F85-9584-20AC4DC33FF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

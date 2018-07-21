@@ -3,8 +3,8 @@
     using System;
 
     [Serializable]
-    public class Environment
+    public class Agent
     {
-        
+
     }
 }

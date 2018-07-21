@@ -34,8 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,11 +53,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zu1779.AGE.MainEngine\Zu1779.AGE.MainEngine.csproj">
       <Project>{2e25d648-1e06-4607-9bdf-bada15409da3}</Project>
       <Name>Zu1779.AGE.MainEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zu1779.AGE.Wcf\Zu1779.AGE.Wcf.csproj">
+      <Project>{6bfaa397-01bb-4cfb-819c-d32a6125910e}</Project>
+      <Name>Zu1779.AGE.Wcf</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

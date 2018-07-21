@@ -18,7 +18,5 @@
         }
 
         private readonly ConcurrentBag<m.Environment> environments = new ConcurrentBag<m.Environment>();
-
-
     }
 }
