@@ -17,6 +17,8 @@
 
         }
 
-        private readonly ConcurrentBag<m.Environment> environments = new ConcurrentBag<m.Environment>();
+        private readonly ConcurrentDictionary<string, m.Environment> environments = new ConcurrentDictionary<string, m.Environment>();
+
+
     }
 }
