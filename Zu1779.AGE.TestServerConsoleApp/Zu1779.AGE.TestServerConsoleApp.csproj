@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zu1779.AGE.MainEngine\Zu1779.AGE.MainEngine.csproj">
-      <Project>{2e25d648-1e06-4607-9bdf-bada15409da3}</Project>
+      <Project>{8c512a60-62ac-454b-9a45-1c131678160f}</Project>
       <Name>Zu1779.AGE.MainEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\Zu1779.AGE.Wcf\Zu1779.AGE.Wcf.csproj">
