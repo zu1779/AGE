@@ -15,6 +15,16 @@
 
         static void Main(string[] args)
         {
+            log4net.Config.XmlConfigurator.Configure();
+
+            log.Debug("DEBUG");
+            log.Info("INFO");
+            log.Warn("WARN");
+            log.Error("ERROR");
+            log.Fatal("FATAL");
+            Console.ReadKey();
+            return;
+
             var program = new Program(args);
             program.Execute();
         }
@@ -41,7 +51,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"EXCEPTION: {ex.Message}");
+                        log.Error($"Command {input} failed: {ex.Message}");
                     }
                 }
 
