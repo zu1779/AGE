@@ -82,14 +82,16 @@
             if (arrInput.Count < 2) throw new ApplicationException("Too few parameters. Usage: env [add|list] [<environment name>]");
             if (arrInput[1] == "add")
             {
-                string environmentCode = "testenv";
+                if (arrInput.Count < 3) throw new ApplicationException("Too few parameters. Usage: env add [<environment name>]");
+                string environmentCode = arrInput[2];
                 string environmentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Environment.TestEnvironment\bin\Debug";
-                engineManager.CreateEnvironment(environmentCode, environmentPath);
+                engineManager.AddEnvironment(environmentCode, environmentPath);
             }
             else if (arrInput[1] == "list")
             {
-                var listEnv = engineManager.ListEnvironment();
-                if (listEnv.Any()) foreach (var item in listEnv) Console.WriteLine(item.Code);
+                var listEnv = engineManager.GetEnvironments().OrderByDescending(c => c.InstanceTime);
+                //if (listEnv.Any()) foreach (var item in listEnv) Console.WriteLine(item.Code);
+                if (listEnv.Any()) Console.WriteLine(string.Join("\r\n", listEnv.Select(c => $"[{c.InstanceTime}] {c.Code}")));
                 else Console.WriteLine("No environment yet");
             }
         }

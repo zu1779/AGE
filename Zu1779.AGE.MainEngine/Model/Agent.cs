@@ -5,15 +5,16 @@
     using System.Security.Permissions;
     using System.Security.Policy;
 
+    using Common.Logging;
+
     [Serializable]
     public class Agent : IDisposable
     {
-        public Agent(string friendlyName)
+        public Agent(string agentCode, ILog log)
         {
-            this.friendlyName = friendlyName ?? throw new ArgumentNullException(nameof(friendlyName));
+            Code = agentCode ?? throw new ArgumentNullException(nameof(agentCode));
             appDomain = createAppDomain();
         }
-        private readonly string friendlyName;
         private AppDomain appDomain;
 
         private AppDomain createAppDomain()
@@ -22,7 +23,7 @@
             var appDomainSetup = new AppDomainSetup();
             var permissionSet = new PermissionSet(PermissionState.None);
             permissionSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
-            var appDomain = AppDomain.CreateDomain(friendlyName, securityInfo, appDomainSetup, permissionSet);
+            var appDomain = AppDomain.CreateDomain(Code, securityInfo, appDomainSetup, permissionSet);
             return appDomain;
         }
 
@@ -31,5 +32,7 @@
             AppDomain.Unload(appDomain);
             appDomain = null;
         }
+
+        public string Code { get; }
     }
 }

@@ -10,16 +10,17 @@
     using Common.Logging;
 
     using Zu1779.AGE.Contract;
+    using m = Zu1779.AGE.MainEngine.Model;
 
     [Serializable]
     public class Environment : IDisposable
     {
         public Environment(string environmentCode, ILog log)
         {
-            this.environmentCode = environmentCode ?? throw new ArgumentNullException(nameof(environmentCode));
+            Code = environmentCode ?? throw new ArgumentNullException(nameof(environmentCode));
             this.log = log ?? throw new ArgumentNullException(nameof(log));
+            InstanceTime = DateTimeOffset.Now;
         }
-        private readonly string environmentCode;
         private readonly ILog log;
         private AppDomain appDomain;
         private IEnvironment environment;
@@ -34,21 +35,22 @@
             }
         }
 
-        public string Code { get { return environmentCode; } }
+        public string Code { get; }
+        public DateTimeOffset InstanceTime { get; }
 
         private AppDomain createAppDomain(string applicationBase)
         {
             var securityInfo = new Evidence();
             var appDomainSetup = new AppDomainSetup { ApplicationBase = applicationBase };
             var permissionSet = new PermissionSet(PermissionState.Unrestricted);
-            var appDomain = AppDomain.CreateDomain(environmentCode, securityInfo, appDomainSetup, permissionSet);
+            var appDomain = AppDomain.CreateDomain(Code, securityInfo, appDomainSetup, permissionSet);
             return appDomain;
         }
 
         public void PrepareEnvironment(string environmentPath)
         {
             if (!Directory.Exists(environmentPath)) throw new ApplicationException($"Path {environmentPath} not found");
-            string envTargetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EnvironmentRepository", environmentCode);
+            string envTargetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EnvironmentRepository", Code);
             if (!Directory.Exists(envTargetPath))
             {
                 Directory.CreateDirectory(envTargetPath);
@@ -67,6 +69,13 @@
 
             appDomain = createAppDomain(envTargetPath);
             environment = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment") as IEnvironment;
+        }
+
+        public void AddAgent(string agentCode)
+        {
+            var agent = new m.Agent(agentCode, log);
+            var added = agents.TryAdd(agentCode, agent);
+            if (!added) throw new ApplicationException($"Agent {agentCode} already exists");
         }
     }
 }
