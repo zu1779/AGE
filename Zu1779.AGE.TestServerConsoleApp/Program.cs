@@ -4,7 +4,7 @@
     using System.Reflection;
     using System.ServiceModel;
 
-    using log4net;
+    using Common.Logging;
 
     using Zu1779.AGE.MainEngine;
     using Zu1779.AGE.Wcf;
@@ -17,13 +17,14 @@
         {
             log4net.Config.XmlConfigurator.Configure();
 
-            log.Debug("DEBUG");
-            log.Info("INFO");
-            log.Warn("WARN");
-            log.Error("ERROR");
-            log.Fatal("FATAL");
-            Console.ReadKey();
-            return;
+            //log.Trace(c => c("TRACE"));
+            //log.Debug(c => c("DEBUG"));
+            //log.Info(c => c("INFO"));
+            //log.Warn(c => c("WARN"));
+            //log.Error(c => c("ERROR"));
+            //log.Fatal(c => c("FATAL"));
+            //Console.ReadKey();
+            //return;
 
             var program = new Program(args);
             program.Execute();
