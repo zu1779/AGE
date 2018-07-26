@@ -27,24 +27,35 @@
         #region Environments
         public void AddEnvironment(string environmentCode, string environmentDllPath)
         {
+            if (environments.ContainsKey(environmentCode)) throw new ApplicationException($"Environment {environmentCode} already exists");
             var environment = new m.Environment(environmentCode, log);
             var added = environments.TryAdd(environmentCode, environment);
+            environment.Prepare(environmentDllPath);
             if (!added) throw new ApplicationException($"Environment {environmentCode} already exists");
-            environment.PrepareEnvironment(environmentDllPath);
         }
 
         public List<m.Environment> GetEnvironments()
         {
             return environments.Values.ToList();
         }
+
+        public m.Environment GetEnvironment(string environmentCode)
+        {
+            return environments[environmentCode];
+        }
         #endregion
 
         #region Agents
         public void AddAgent(string environmentCode, string agentCode, string agentDllPath)
         {
+            var environment = environments[environmentCode];
+            environment.AddAgent(agentCode);
+        }
 
-            var agent = new m.Agent(agentCode, log);
-            
+        public List<m.Agent> GetAgents(string environmentCode)
+        {
+            var environment = environments[environmentCode];
+            return environment.GetAgents();
         }
         #endregion
     }

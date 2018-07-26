@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Security;
     using System.Security.Permissions;
     using System.Security.Policy;
@@ -35,9 +37,6 @@
             }
         }
 
-        public string Code { get; }
-        public DateTimeOffset InstanceTime { get; }
-
         private AppDomain createAppDomain(string applicationBase)
         {
             var securityInfo = new Evidence();
@@ -47,7 +46,11 @@
             return appDomain;
         }
 
-        public void PrepareEnvironment(string environmentPath)
+        public string Code { get; }
+        public DateTimeOffset InstanceTime { get; }
+
+
+        public void Prepare(string environmentPath)
         {
             if (!Directory.Exists(environmentPath)) throw new ApplicationException($"Path {environmentPath} not found");
             string envTargetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EnvironmentRepository", Code);
@@ -71,11 +74,21 @@
             environment = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment") as IEnvironment;
         }
 
+        public List<string> GetAppConfig()
+        {
+            return environment.GetAppConfig();
+        }
+
         public void AddAgent(string agentCode)
         {
-            var agent = new m.Agent(agentCode, log);
+            var agent = new m.Agent(agentCode, this, log);
             var added = agents.TryAdd(agentCode, agent);
             if (!added) throw new ApplicationException($"Agent {agentCode} already exists");
+        }
+
+        public List<Agent> GetAgents()
+        {
+            return agents.Values.ToList();
         }
     }
 }

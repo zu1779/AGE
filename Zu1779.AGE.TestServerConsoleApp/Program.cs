@@ -69,6 +69,7 @@
             var arrInput = getInputArray(input);
             if (arrInput[0] == "exit") Console.WriteLine("Exiting");
             else if (arrInput[0] == "env") env(arrInput);
+            else if (arrInput[0] == "test") test();
             else Console.WriteLine("Uknown command");
         }
         private List<string> getInputArray(string input)
@@ -76,6 +77,15 @@
             Regex regex = new Regex(@"((""((?<token>.*?)(?<!\\)"")|(?<token>[\w]+))(\s)*)");
             var result = regex.Matches(input).Cast<Match>().Where(c => c.Groups["token"].Success).Select(c => c.Groups["token"].Value).ToList();
             return result;
+        }
+        private void test()
+        {
+            string environmentCode = "test";
+            string environmentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Environment.TestEnvironment\bin\Debug";
+            engineManager.AddEnvironment(environmentCode, environmentPath);
+            engineManager.AddAgent(environmentCode, "agent001", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug\Zu1779.AGE.Agent.TestAgent.dll");
+            engineManager.AddAgent(environmentCode, "agent002", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug\Zu1779.AGE.Agent.TestAgent.dll");
+            engineManager.AddAgent(environmentCode, "agent003", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug\Zu1779.AGE.Agent.TestAgent.dll");
         }
         private void env(List<string> arrInput)
         {

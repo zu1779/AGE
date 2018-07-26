@@ -1,6 +1,9 @@
 ﻿namespace Zu1779.AGE.Environment.TestEnvironment
 {
     using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
 
     using log4net;
 
@@ -30,6 +33,13 @@
         public void Stop()
         {
             log.Info("Stop()");
+        }
+
+        public List<string> GetAppConfig()
+        {
+            var response = new List<string>();
+            response.AddRange(ConfigurationManager.AppSettings.AllKeys);
+            return response;
         }
     }
 }
