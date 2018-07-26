@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using Common.Logging;
 
@@ -22,14 +24,17 @@
 
         private readonly ConcurrentDictionary<string, m.Environment> environments = new ConcurrentDictionary<string, m.Environment>();
 
-        public void CreateEnvironment()
+        public void CreateEnvironment(string environmentCode, string environmentDllPath)
         {
-            log.Info($"Environment creating");
-            string envKey = "env001";
-            var environment = new m.Environment(envKey);
-            var added = environments.TryAdd(envKey, environment);
+            var environment = new m.Environment(environmentCode, log);
+            var added = environments.TryAdd(environmentCode, environment);
             if (!added) throw new ApplicationException("Environment already exists");
-            log.Info($"Environment created");
+            environment.PrepareEnvironment(environmentDllPath);
+        }
+
+        public List<m.Environment> ListEnvironment()
+        {
+            return environments.Values.ToList();
         }
     }
 }

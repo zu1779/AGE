@@ -1,8 +1,11 @@
 ﻿namespace Zu1779.AGE.TestServerConsoleApp
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using System.ServiceModel;
+    using System.Text.RegularExpressions;
 
     using Common.Logging;
 
@@ -63,9 +66,32 @@
 
         private void executeInput(string input)
         {
-            if (input == "exit") Console.WriteLine("Exiting");
-            else if (input.StartsWith("addenv")) engineManager.CreateEnvironment();
+            var arrInput = getInputArray(input);
+            if (arrInput[0] == "exit") Console.WriteLine("Exiting");
+            else if (arrInput[0] == "env") env(arrInput);
             else Console.WriteLine("Uknown command");
+        }
+        private List<string> getInputArray(string input)
+        {
+            Regex regex = new Regex(@"((""((?<token>.*?)(?<!\\)"")|(?<token>[\w]+))(\s)*)");
+            var result = regex.Matches(input).Cast<Match>().Where(c => c.Groups["token"].Success).Select(c => c.Groups["token"].Value).ToList();
+            return result;
+        }
+        private void env(List<string> arrInput)
+        {
+            if (arrInput.Count < 2) throw new ApplicationException("Too few parameters. Usage: env [add|list] [<environment name>]");
+            if (arrInput[1] == "add")
+            {
+                string environmentCode = "testenv";
+                string environmentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Environment.TestEnvironment\bin\Debug";
+                engineManager.CreateEnvironment(environmentCode, environmentPath);
+            }
+            else if (arrInput[1] == "list")
+            {
+                var listEnv = engineManager.ListEnvironment();
+                if (listEnv.Any()) foreach (var item in listEnv) Console.WriteLine(item.Code);
+                else Console.WriteLine("No environment yet");
+            }
         }
 
         private void startWcfInterface()
