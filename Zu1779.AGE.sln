@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{7B4DD1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.MainEngine", "Zu1779.AGE.MainEngine\Zu1779.AGE.MainEngine.csproj", "{8C512A60-62AC-454B-9A45-1C131678160F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Environment", "Environment", "{8BD8223D-AE69-4342-8A50-6B0EBB148DB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agent", "Agent", "{507BB72D-5B96-4FAF-A0D4-D59D740490A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

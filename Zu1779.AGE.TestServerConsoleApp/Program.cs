@@ -34,8 +34,15 @@
                 {
                     Console.WriteLine(Assembly.GetExecutingAssembly().GetName());
                     Console.Write("> ");
-                    input = Console.ReadLine();
-                    executeInput(input);
+                    input = Console.ReadLine().ToLower();
+                    try
+                    {
+                        executeInput(input);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"EXCEPTION: {ex.Message}");
+                    }
                 }
 
                 stopWcfInterface();
@@ -45,6 +52,7 @@
         private void executeInput(string input)
         {
             if (input == "exit") Console.WriteLine("Exiting");
+            else if (input.StartsWith("addenv")) engineManager.CreateEnvironment();
             else Console.WriteLine("Uknown command");
         }
 
