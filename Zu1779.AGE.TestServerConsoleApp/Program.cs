@@ -11,7 +11,7 @@
 
     class Program
     {
-        private static readonly ILog log = LogManager.GetLogger(nameof(Program));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
         static void Main(string[] args)
         {
@@ -36,7 +36,8 @@
 
         public void Execute()
         {
-            using (engineManager = new EngineManager())
+            ILog logEngineManager = LogManager.GetLogger<EngineManager>();
+            using (engineManager = new EngineManager(logEngineManager))
             {
                 startWcfInterface();
 

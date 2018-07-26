@@ -36,7 +36,7 @@
 
     partial class MainService : ServiceBase
     {
-        private static readonly ILog log = LogManager.GetLogger(nameof(MainService));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainService));
 
         public MainService()
         {
@@ -131,7 +131,8 @@
         {
             log.Info($"Begin {nameof(startEngine)}");
 
-            engineManager = new EngineManager();
+            ILog logEngineManager = LogManager.GetLogger<EngineManager>();
+            engineManager = new EngineManager(logEngineManager);
 
             log.Info($"End {nameof(startEngine)}");
         }
