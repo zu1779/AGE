@@ -44,16 +44,16 @@
             return environments[environmentCode];
         }
 
+        public void CheckStatusEnvironment(string environmentCode)
+        {
+            var environment = environments[environmentCode];
+            environment.CheckStatus();
+        }
+
         public void SetUpEnvironment(string environmentCode)
         {
             var environment = environments[environmentCode];
             environment.SetUp();
-        }
-
-        public void TearDownEnvironment(string environmentCode)
-        {
-            var environment = environments[environmentCode];
-            environment.TearDown();
         }
 
         public void StartEnvironment(string environmentCode)
@@ -84,6 +84,12 @@
         {
             var environment = environments[environmentCode];
             environment.Stop();
+        }
+
+        public void TearDownEnvironment(string environmentCode)
+        {
+            var environment = environments[environmentCode];
+            environment.TearDown();
         }
         #endregion
 

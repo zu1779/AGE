@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Reflection;
     using System.Security;
     using System.Security.Permissions;
     using System.Security.Policy;
@@ -62,7 +63,20 @@
                 File.Copy(file, file.Replace(agentPath, agentTargetPath));
 
             appDomain = createAppDomain(agentTargetPath);
-            Agent = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Agent.TestAgent", "Zu1779.AGE.Agent.TestAgent.TestAgent") as IAgent;
+            Agent = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Agent.TestAgent", "Zu1779.AGE.Agent.TestAgent.TestAgent", true, BindingFlags.Default, null, new[] { Code }, null, null) as IAgent;
+        }
+
+        public CheckStatusResponse CheckStatus()
+        {
+            try
+            {
+                var response = Agent.CheckStatus();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new CheckStatusResponse { HealthState = false, Exception = ex };
+            }
         }
     }
 }

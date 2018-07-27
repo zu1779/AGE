@@ -2,7 +2,8 @@
 {
     public interface IAgent
     {
-        void CheckStatus();
+        string Code { get; }
+        CheckStatusResponse CheckStatus();
         void SetUp();
         void TearDown();
         void Start();

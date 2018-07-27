@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Security;
     using System.Security.Permissions;
     using System.Security.Policy;
@@ -74,7 +75,7 @@
                 File.Copy(file, file.Replace(environmentPath, envTargetPath));
 
             appDomain = createAppDomain(envTargetPath);
-            environment = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment") as IEnvironment;
+            environment = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment", true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
         }
 
         public void AddAgent(string agentCode, string agentPath)
@@ -91,6 +92,17 @@
         public List<AgentOrchestrator> GetAgents()
         {
             return agents.Values.ToList();
+        }
+
+        public void CheckStatus()
+        {
+            environment.CheckStatus();
+            foreach (var agent in agents)
+            {
+                var agentResponse = agent.Value.CheckStatus();
+                if (agentResponse.HealthState) log.Info(agentResponse);
+                else log.Error(agentResponse);
+            }
         }
 
         public void SetUp()

@@ -49,7 +49,7 @@
                 startWcfInterface();
 
                 string input = null;
-                while (input?.ToLower() != "exit")
+                while (input != "exit")
                 {
                     Console.WriteLine(Assembly.GetExecutingAssembly().GetName());
                     Console.Write("> ");
@@ -95,8 +95,14 @@
             engineManager.AddAgent(environmentCode, "agent001", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
             engineManager.AddAgent(environmentCode, "agent002", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
             engineManager.AddAgent(environmentCode, "agent003", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
+            engineManager.CheckStatusEnvironment(environmentCode);
             engineManager.SetUpEnvironment(environmentCode);
             engineManager.StartEnvironment(environmentCode);
+            engineManager.PauseEnvironment(environmentCode);
+            engineManager.ContinueEnvironment(environmentCode);
+            engineManager.CommandEnvironment(environmentCode, 17);
+            engineManager.StopEnvironment(environmentCode);
+            engineManager.TearDownEnvironment(environmentCode);
         }
         private void env(List<string> arrInput)
         {
@@ -117,6 +123,7 @@
             }
         }
 
+        #region WCF
         private void startWcfInterface()
         {
             log.Info($"Starting WCF Interface");
@@ -136,5 +143,6 @@
             }
             log.Info($"Stopped WCF Interface");
         }
+        #endregion
     }
 }

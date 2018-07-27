@@ -8,9 +8,15 @@
     [Serializable]
     public class TestAgent : MarshalByRefObject, IAgent, IAgentCommunication
     {
-        public void CheckStatus()
+        public TestAgent(string agentCode)
         {
-            throw new NotImplementedException();
+            Code = agentCode;
+        }
+        public string Code { get; }
+
+        public CheckStatusResponse CheckStatus()
+        {
+            return new CheckStatusResponse { HealthState = true };
         }
 
         public void SetUp()
