@@ -6,6 +6,7 @@
     using System.Configuration;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
 
     using log4net;
 
@@ -15,13 +16,16 @@
     [Serializable]
     public class TestEnvironment : MarshalByRefObject, IEnvironment
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(TestEnvironment));
+        private static readonly ILog log;
 
         static TestEnvironment()
         {
-            FileInfo fileInfo = new FileInfo("log4net_config.xml");
+            string logDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string logFilePath = Path.Combine(logDirPath, "log4net_config.xml");
+            FileInfo fileInfo = new FileInfo(logFilePath);
             log4net.Config.XmlConfigurator.Configure(fileInfo);
-            log.Info("static TestEnvironment()");
+            log = LogManager.GetLogger(typeof(TestEnvironment));
+            log.Info("static TestEnvironment");
         }
 
         public TestEnvironment()
@@ -43,14 +47,44 @@
             if (!added) throw new ApplicationException($"Environment cannot add agent");
         }
 
+        public void CheckStatus()
+        {
+            log.Info(nameof(CheckStatus));
+        }
+
+        public void SetUp()
+        {
+            log.Info(nameof(SetUp));
+        }
+
+        public void TearDown()
+        {
+            log.Info(nameof(TearDown));
+        }
+
         public void Start()
         {
-            log.Info("Start()");
+            log.Info(nameof(Start));
+        }
+
+        public void Pause()
+        {
+            log.Info(nameof(Pause));
+        }
+
+        public void Continue()
+        {
+            log.Info(nameof(Continue));
+        }
+
+        public void Command(int command)
+        {
+            log.Info($"{nameof(Command)} {command}");
         }
 
         public void Stop()
         {
-            log.Info("Stop()");
+            log.Info(nameof(Stop));
         }
     }
 }

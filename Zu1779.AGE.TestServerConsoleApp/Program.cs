@@ -95,7 +95,8 @@
             engineManager.AddAgent(environmentCode, "agent001", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
             engineManager.AddAgent(environmentCode, "agent002", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
             engineManager.AddAgent(environmentCode, "agent003", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
-            env(new List<string> { "env", "list" });
+            engineManager.SetUpEnvironment(environmentCode);
+            engineManager.StartEnvironment(environmentCode);
         }
         private void env(List<string> arrInput)
         {

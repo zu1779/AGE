@@ -8,6 +8,21 @@
     [Serializable]
     public class TestAgent : MarshalByRefObject, IAgent, IAgentCommunication
     {
+        public void CheckStatus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetUp()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TearDown()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Start()
         {
             throw new NotImplementedException();

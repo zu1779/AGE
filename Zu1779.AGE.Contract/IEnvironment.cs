@@ -4,9 +4,16 @@
 
     public interface IEnvironment
     {
-        void Start();
-        void Stop();
         (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent);
         void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent);
+
+        void CheckStatus();
+        void SetUp();
+        void TearDown();
+        void Start();
+        void Pause();
+        void Continue();
+        void Command(int command);
+        void Stop();
     }
 }

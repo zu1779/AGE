@@ -44,10 +44,46 @@
             return environments[environmentCode];
         }
 
-        public void Start(string environmentCode)
+        public void SetUpEnvironment(string environmentCode)
+        {
+            var environment = environments[environmentCode];
+            environment.SetUp();
+        }
+
+        public void TearDownEnvironment(string environmentCode)
+        {
+            var environment = environments[environmentCode];
+            environment.TearDown();
+        }
+
+        public void StartEnvironment(string environmentCode)
         {
             var environment = environments[environmentCode];
             environment.Start();
+        }
+
+        public void PauseEnvironment(string environmentCode)
+        {
+            var environment = environments[environmentCode];
+            environment.Pause();
+        }
+
+        public void ContinueEnvironment(string environmentCode)
+        {
+            var environment = environments[environmentCode];
+            environment.Continue();
+        }
+
+        public void CommandEnvironment(string environmentCode, int command)
+        {
+            var environment = environments[environmentCode];
+            environment.Command(command);
+        }
+
+        public void StopEnvironment(string environmentCode)
+        {
+            var environment = environments[environmentCode];
+            environment.Stop();
         }
         #endregion
 

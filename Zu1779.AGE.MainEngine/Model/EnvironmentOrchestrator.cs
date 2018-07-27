@@ -25,7 +25,6 @@
         }
         private readonly ILog log;
         private AppDomain appDomain;
-        private IEnvironment environment;
         private readonly ConcurrentDictionary<string, AgentOrchestrator> agents = new ConcurrentDictionary<string, AgentOrchestrator>();
 
         public void Dispose()
@@ -48,7 +47,12 @@
 
         public string Code { get; }
         public DateTimeOffset InstanceTime { get; }
+        private IEnvironment environment { get; set; }
 
+        /// <summary>
+        /// Prepare an AppDomain for the executin of the Environment.
+        /// </summary>
+        /// <param name="environmentPath">Path of the folder that contains the Environments dlls.</param>
         public void Prepare(string environmentPath)
         {
             if (!Directory.Exists(environmentPath)) throw new ApplicationException($"Path {environmentPath} not found");
@@ -89,9 +93,39 @@
             return agents.Values.ToList();
         }
 
+        public void SetUp()
+        {
+            environment.SetUp();
+        }
+
+        public void TearDown()
+        {
+            environment.TearDown();
+        }
+
         public void Start()
         {
             environment.Start();
+        }
+
+        public void Pause()
+        {
+            environment.Pause();
+        }
+
+        public void Continue()
+        {
+            environment.Continue();
+        }
+
+        public void Command(int command)
+        {
+            environment.Command(command);
+        }
+
+        public void Stop()
+        {
+            environment.Stop();
         }
     }
 }
