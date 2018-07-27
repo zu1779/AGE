@@ -9,6 +9,8 @@
 
     using m = Zu1779.AGE.MainEngine.Model;
 
+    //TODO: //LASTWORK: decide about separate environment from agent (test if an agent can read private properties of environment via reflection)
+
     public class EngineManager : IDisposable
     {
         public EngineManager(ILog log)

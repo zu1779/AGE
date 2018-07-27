@@ -52,20 +52,6 @@
         public void CheckStatus()
         {
             log.Info(nameof(CheckStatus));
-            //REMARK: decidere se va bene che l'environment controlli se gli agenti stanno bene (ma anche no!!!)
-            //foreach (var agent in agents)
-            //{
-            //    try
-            //    {
-            //        var response = agent.Value.CheckStatus();
-            //        if (!response.HealthState)
-            //            log.Error($"Agent {agent.Value.Code} of Environment {code} has {nameof(response.HealthState)} to {response.HealthState}");
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        log.Error($"Agent {agent.Value.Code} of Environment {code} thrown an exception: {ex.Message}");
-            //    }
-            //}
         }
 
         public void SetUp()
