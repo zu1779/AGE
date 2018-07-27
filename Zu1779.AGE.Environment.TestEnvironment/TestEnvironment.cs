@@ -10,6 +10,7 @@
     using log4net;
 
     using Zu1779.AGE.Contract;
+    using Zu1779.AGE.Environment.TestEnvironment.Contract;
 
     [Serializable]
     public class TestEnvironment : MarshalByRefObject, IEnvironment
@@ -32,7 +33,8 @@
 
         public (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent)
         {
-
+            if (agent is IAgentCommunication) return (true, null);
+            else return (false, $"Agent doesn't implement {nameof(IAgentCommunication)}");
         }
 
         public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)

@@ -79,6 +79,8 @@
             agent.Prepare(agentPath);
             var added = agents.TryAdd(agentCode, agent);
             if (!added) throw new ApplicationException($"Agent {agentCode} already exists");
+            var (valid, unvalidCause) = environment.CheckAgentValidity(AgentTypeEnum.User, agent.Agent);
+            if (!valid) throw new ApplicationException($"Agent {agentCode} failed validation with environment {Code}. Cause: {unvalidCause}");
             environment.AttachAgent(AgentTypeEnum.User, agentCode, agent.Agent);
         }
 
