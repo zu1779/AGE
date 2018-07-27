@@ -15,9 +15,9 @@
     using m = Zu1779.AGE.MainEngine.Model;
 
     [Serializable]
-    public class Environment : IDisposable
+    public class EnvironmentOrchestrator : IDisposable
     {
-        public Environment(string environmentCode, ILog log)
+        public EnvironmentOrchestrator(string environmentCode, ILog log)
         {
             Code = environmentCode ?? throw new ArgumentNullException(nameof(environmentCode));
             this.log = log ?? throw new ArgumentNullException(nameof(log));
@@ -26,7 +26,7 @@
         private readonly ILog log;
         private AppDomain appDomain;
         private IEnvironment environment;
-        private readonly ConcurrentDictionary<string, Agent> agents = new ConcurrentDictionary<string, Agent>();
+        private readonly ConcurrentDictionary<string, AgentOrchestrator> agents = new ConcurrentDictionary<string, AgentOrchestrator>();
 
         public void Dispose()
         {
@@ -73,20 +73,16 @@
             environment = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment") as IEnvironment;
         }
 
-        public List<string> GetAppConfig()
-        {
-            return environment.GetAppConfig();
-        }
-
         public void AddAgent(string agentCode, string agentPath)
         {
-            var agent = new m.Agent(agentCode, this, log);
+            var agent = new AgentOrchestrator(agentCode, this, log);
             agent.Prepare(agentPath);
             var added = agents.TryAdd(agentCode, agent);
             if (!added) throw new ApplicationException($"Agent {agentCode} already exists");
+            environment.AttachAgent(AgentTypeEnum.User, agentCode, agent.Agent);
         }
 
-        public List<Agent> GetAgents()
+        public List<AgentOrchestrator> GetAgents()
         {
             return agents.Values.ToList();
         }

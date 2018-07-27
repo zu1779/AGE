@@ -6,6 +6,7 @@
     {
         void Start();
         void Stop();
-        List<string> GetAppConfig();
+        (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent);
+        void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent);
     }
 }

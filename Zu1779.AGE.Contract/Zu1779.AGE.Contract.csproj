@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentTypeEnum.cs" />
     <Compile Include="IAgent.cs" />
     <Compile Include="IEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

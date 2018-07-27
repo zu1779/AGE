@@ -1,8 +1,10 @@
 ﻿namespace Zu1779.AGE.Environment.TestEnvironment
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.IO;
     using System.Linq;
 
     using log4net;
@@ -16,13 +18,27 @@
 
         static TestEnvironment()
         {
-            log4net.Config.XmlConfigurator.Configure();
+            FileInfo fileInfo = new FileInfo("log4net_config.xml");
+            log4net.Config.XmlConfigurator.Configure(fileInfo);
             log.Info("static TestEnvironment()");
         }
 
         public TestEnvironment()
         {
             log.Info("public TestEnvironment");
+        }
+
+        private ConcurrentDictionary<string, IAgent> agents { get; } = new ConcurrentDictionary<string, IAgent>();
+
+        public (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent)
+        {
+
+        }
+
+        public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)
+        {
+            var added = agents.TryAdd(agentCode, agent);
+            if (!added) throw new ApplicationException($"Environment cannot add agent");
         }
 
         public void Start()
@@ -33,13 +49,6 @@
         public void Stop()
         {
             log.Info("Stop()");
-        }
-
-        public List<string> GetAppConfig()
-        {
-            var response = new List<string>();
-            response.AddRange(ConfigurationManager.AppSettings.AllKeys);
-            return response;
         }
     }
 }

@@ -11,23 +11,21 @@
     using Zu1779.AGE.Contract;
 
     [Serializable]
-    public class Agent : IDisposable
+    public class AgentOrchestrator : IDisposable
     {
-        public Agent(string agentCode, Environment environment, ILog log)
+        public AgentOrchestrator(string agentCode, EnvironmentOrchestrator environment, ILog log)
         {
             Code = agentCode ?? throw new ArgumentNullException(nameof(agentCode));
             this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
             InstanceTime = DateTimeOffset.Now;
         }
-        private AppDomain appDomain;
-        private readonly Environment environment;
-        private IAgent agent;
-
         public void Dispose()
         {
             AppDomain.Unload(appDomain);
             appDomain = null;
         }
+        private AppDomain appDomain;
+        private readonly EnvironmentOrchestrator environment;
 
         private AppDomain createAppDomain(string applicationBase)
         {
@@ -41,6 +39,7 @@
 
         public string Code { get; }
         public DateTimeOffset InstanceTime { get; }
+        public IAgent Agent { get; private set; }
 
         public void Prepare(string agentPath)
         {
@@ -63,7 +62,7 @@
                 File.Copy(file, file.Replace(agentPath, agentTargetPath));
 
             appDomain = createAppDomain(agentTargetPath);
-            agent = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Agent.TestAgent", "Zu1779.AGE.Agent.TestAgent.TestAgent") as IAgent;
+            Agent = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Agent.TestAgent", "Zu1779.AGE.Agent.TestAgent.TestAgent") as IAgent;
         }
     }
 }

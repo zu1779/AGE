@@ -22,24 +22,24 @@
 
         }
 
-        private readonly ConcurrentDictionary<string, m.Environment> environments = new ConcurrentDictionary<string, m.Environment>();
+        private readonly ConcurrentDictionary<string, m.EnvironmentOrchestrator> environments = new ConcurrentDictionary<string, m.EnvironmentOrchestrator>();
 
         #region Environments
         public void AddEnvironment(string environmentCode, string environmentPath)
         {
             if (environments.ContainsKey(environmentCode)) throw new ApplicationException($"Environment {environmentCode} already exists");
-            var environment = new m.Environment(environmentCode, log);
+            var environment = new m.EnvironmentOrchestrator(environmentCode, log);
             var added = environments.TryAdd(environmentCode, environment);
             environment.Prepare(environmentPath);
             if (!added) throw new ApplicationException($"Environment {environmentCode} already exists");
         }
 
-        public List<m.Environment> GetEnvironments()
+        public List<m.EnvironmentOrchestrator> GetEnvironments()
         {
             return environments.Values.ToList();
         }
 
-        public m.Environment GetEnvironment(string environmentCode)
+        public m.EnvironmentOrchestrator GetEnvironment(string environmentCode)
         {
             return environments[environmentCode];
         }
@@ -58,7 +58,7 @@
             environment.AddAgent(agentCode, agentPath);
         }
 
-        public List<m.Agent> GetAgents(string environmentCode)
+        public List<m.AgentOrchestrator> GetAgents(string environmentCode)
         {
             var environment = environments[environmentCode];
             return environment.GetAgents();
