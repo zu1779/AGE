@@ -4,7 +4,8 @@
 
     using Zu1779.AGE.Contract;
 
-    public class TestAgent : IAgent
+    [Serializable]
+    public class TestAgent : MarshalByRefObject, IAgent
     {
         public void Start()
         {

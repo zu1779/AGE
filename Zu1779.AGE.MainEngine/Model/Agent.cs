@@ -17,21 +17,11 @@
         {
             Code = agentCode ?? throw new ArgumentNullException(nameof(agentCode));
             this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            appDomain = createAppDomain();
+            InstanceTime = DateTimeOffset.Now;
         }
         private AppDomain appDomain;
         private readonly Environment environment;
         private IAgent agent;
-
-        private AppDomain createAppDomain()
-        {
-            var securityInfo = new Evidence();
-            var appDomainSetup = new AppDomainSetup();
-            var permissionSet = new PermissionSet(PermissionState.None);
-            permissionSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
-            var appDomain = AppDomain.CreateDomain(Code, securityInfo, appDomainSetup, permissionSet);
-            return appDomain;
-        }
 
         public void Dispose()
         {
@@ -50,6 +40,7 @@
         }
 
         public string Code { get; }
+        public DateTimeOffset InstanceTime { get; }
 
         public void Prepare(string agentPath)
         {
@@ -72,7 +63,7 @@
                 File.Copy(file, file.Replace(agentPath, agentTargetPath));
 
             appDomain = createAppDomain(agentTargetPath);
-            agent = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment") as IAgent;
+            agent = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Agent.TestAgent", "Zu1779.AGE.Agent.TestAgent.TestAgent") as IAgent;
         }
     }
 }

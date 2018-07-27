@@ -33,7 +33,11 @@
             program.Execute();
         }
 
-        public Program(string[] args) { }
+        public Program(string[] args)
+        {
+            this.args = new Queue<string>(args);
+        }
+        private readonly Queue<string> args;
         private EngineManager engineManager;
         private ServiceHost serviceHost;
 
@@ -49,7 +53,12 @@
                 {
                     Console.WriteLine(Assembly.GetExecutingAssembly().GetName());
                     Console.Write("> ");
-                    input = Console.ReadLine().ToLower();
+                    if (args.Count > 0)
+                    {
+                        input = args.Dequeue();
+                        Console.WriteLine(input);
+                    }
+                    else input = Console.ReadLine().ToLower();
                     try
                     {
                         executeInput(input);
@@ -83,9 +92,10 @@
             string environmentCode = "test";
             string environmentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Environment.TestEnvironment\bin\Debug";
             engineManager.AddEnvironment(environmentCode, environmentPath);
-            engineManager.AddAgent(environmentCode, "agent001", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug\Zu1779.AGE.Agent.TestAgent.dll");
-            engineManager.AddAgent(environmentCode, "agent002", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug\Zu1779.AGE.Agent.TestAgent.dll");
-            engineManager.AddAgent(environmentCode, "agent003", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug\Zu1779.AGE.Agent.TestAgent.dll");
+            engineManager.AddAgent(environmentCode, "agent001", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
+            engineManager.AddAgent(environmentCode, "agent002", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
+            engineManager.AddAgent(environmentCode, "agent003", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
+            env(new List<string> { "env", "list" });
         }
         private void env(List<string> arrInput)
         {

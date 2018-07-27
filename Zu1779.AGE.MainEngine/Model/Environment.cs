@@ -49,7 +49,6 @@
         public string Code { get; }
         public DateTimeOffset InstanceTime { get; }
 
-
         public void Prepare(string environmentPath)
         {
             if (!Directory.Exists(environmentPath)) throw new ApplicationException($"Path {environmentPath} not found");
@@ -79,9 +78,10 @@
             return environment.GetAppConfig();
         }
 
-        public void AddAgent(string agentCode)
+        public void AddAgent(string agentCode, string agentPath)
         {
             var agent = new m.Agent(agentCode, this, log);
+            agent.Prepare(agentPath);
             var added = agents.TryAdd(agentCode, agent);
             if (!added) throw new ApplicationException($"Agent {agentCode} already exists");
         }
@@ -89,6 +89,11 @@
         public List<Agent> GetAgents()
         {
             return agents.Values.ToList();
+        }
+
+        public void Start()
+        {
+            environment.Start();
         }
     }
 }
