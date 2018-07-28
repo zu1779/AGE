@@ -47,8 +47,11 @@
     <Compile Include="AgentTypeEnum.cs" />
     <Compile Include="CheckStatusResponse.cs" />
     <Compile Include="IAgent.cs" />
+    <Compile Include="IAgentCommunication.cs" />
     <Compile Include="IEnvironment.cs" />
+    <Compile Include="IEnvironmentCommunication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetUpRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

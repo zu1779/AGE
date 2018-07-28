@@ -10,11 +10,11 @@
 
     using log4net;
 
-    using Zu1779.AGE.Contract;
-    using Zu1779.AGE.Environment.TestEnvironment.Contract;
+    using cnt = Zu1779.AGE.Contract;
+    using envcnt = Zu1779.AGE.Environment.TestEnvironment.Contract;
 
     [Serializable]
-    public class TestEnvironment : MarshalByRefObject, IEnvironment
+    public class TestEnvironment : MarshalByRefObject, cnt.IEnvironment, cnt.IEnvironmentCommunication
     {
         private static readonly ILog log;
 
@@ -34,16 +34,16 @@
             code = environmentCode;
         }
 
-        private ConcurrentDictionary<string, IAgent> agents { get; } = new ConcurrentDictionary<string, IAgent>();
+        private ConcurrentDictionary<string, cnt.IAgent> agents { get; } = new ConcurrentDictionary<string, cnt.IAgent>();
         private string code { get; }
 
-        public (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent)
+        public (bool isValid, string unvalidCause) CheckAgentValidity(cnt.AgentTypeEnum agentType, cnt.IAgent agent)
         {
-            if (agent is IAgentCommunication) return (true, null);
-            else return (false, $"Agent doesn't implement {nameof(IAgentCommunication)}");
+            if (agent is cnt.IAgentCommunication) return (true, null);
+            else return (false, $"Agent doesn't implement {nameof(cnt.IAgentCommunication)}");
         }
 
-        public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)
+        public void AttachAgent(cnt.AgentTypeEnum agentType, string agentCode, cnt.IAgent agent)
         {
             var added = agents.TryAdd(agentCode, agent);
             if (!added) throw new ApplicationException($"Environment cannot add agent");
@@ -57,16 +57,29 @@
         public void SetUp()
         {
             log.Info(nameof(SetUp));
+            foreach (var agent in agents)
+            {
+                var request = new cnt.SetUpRequest { Environment = this };
+                agent.Value.SetUp(request);
+            }
         }
 
         public void TearDown()
         {
             log.Info(nameof(TearDown));
+            foreach (var agent in agents)
+            {
+                agent.Value.TearDown();
+            }
         }
 
         public void Start()
         {
             log.Info(nameof(Start));
+            foreach (var agent in agents)
+            {
+                agent.Value.Start();
+            }
         }
 
         public void Pause()
@@ -87,6 +100,10 @@
         public void Stop()
         {
             log.Info(nameof(Stop));
+            foreach (var agent in agents)
+            {
+                agent.Value.Stop();
+            }
         }
     }
 }

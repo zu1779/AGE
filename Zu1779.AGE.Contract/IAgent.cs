@@ -4,7 +4,7 @@
     {
         string Code { get; }
         CheckStatusResponse CheckStatus();
-        void SetUp();
+        void SetUp(SetUpRequest request);
         void TearDown();
         void Start();
         void Stop();

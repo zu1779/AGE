@@ -93,8 +93,6 @@
             string environmentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Environment.TestEnvironment\bin\Debug";
             engineManager.AddEnvironment(environmentCode, environmentPath);
             engineManager.AddAgent(environmentCode, "agent001", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
-            engineManager.AddAgent(environmentCode, "agent002", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
-            engineManager.AddAgent(environmentCode, "agent003", @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.TestAgent\bin\Debug");
             engineManager.CheckStatusEnvironment(environmentCode);
             engineManager.SetUpEnvironment(environmentCode);
             engineManager.StartEnvironment(environmentCode);

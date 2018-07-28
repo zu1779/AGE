@@ -1,6 +1,6 @@
 ﻿namespace Zu1779.AGE.Environment.TestEnvironment.Contract
 {
-    public interface IEnvironmentCommunication
+    public interface IAgentTestComm
     {
         void SendMessage(string message);
     }

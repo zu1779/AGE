@@ -1,42 +1,45 @@
 ﻿namespace Zu1779.AGE.Agent.TestAgent
 {
     using System;
+    using System.Reflection;
 
-    using Zu1779.AGE.Contract;
-    using Zu1779.AGE.Environment.TestEnvironment.Contract;
+    using cnt = Zu1779.AGE.Contract;
+    using envcnt = Zu1779.AGE.Environment.TestEnvironment.Contract;
 
     [Serializable]
-    public class TestAgent : MarshalByRefObject, IAgent, IAgentCommunication
+    public class TestAgent : MarshalByRefObject, cnt.IAgent, cnt.IAgentCommunication, envcnt.IAgentTestComm
     {
         public TestAgent(string agentCode)
         {
             Code = agentCode;
         }
+        private cnt.IEnvironmentCommunication environment;
+
         public string Code { get; }
 
-        public CheckStatusResponse CheckStatus()
+        public cnt.CheckStatusResponse CheckStatus()
         {
-            return new CheckStatusResponse { HealthState = true };
+            return new cnt.CheckStatusResponse { HealthState = true };
         }
 
-        public void SetUp()
+        public void SetUp(cnt.SetUpRequest request)
         {
-            throw new NotImplementedException();
+            environment = request.Environment;
         }
 
         public void TearDown()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Start()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void SendMessage(string message)
