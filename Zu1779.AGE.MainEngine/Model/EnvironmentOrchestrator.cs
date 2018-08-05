@@ -75,6 +75,10 @@
                 File.Copy(file, file.Replace(environmentPath, envTargetPath));
 
             appDomain = createAppDomain(envTargetPath);
+            appDomain.DoCallBack(() =>
+            {
+                Assembly.ReflectionOnlyLoad()
+            });
             environment = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment", true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
         }
 

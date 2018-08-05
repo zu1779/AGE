@@ -79,6 +79,7 @@
             if (arrInput[0] == "exit") Console.WriteLine("Exiting");
             else if (arrInput[0] == "env") env(arrInput);
             else if (arrInput[0] == "test") test();
+            else if (arrInput[0] == "card") card();
             else Console.WriteLine("Uknown command");
         }
         private List<string> getInputArray(string input)
@@ -99,6 +100,17 @@
             engineManager.PauseEnvironment(environmentCode);
             engineManager.ContinueEnvironment(environmentCode);
             engineManager.CommandEnvironment(environmentCode, 17);
+            engineManager.StopEnvironment(environmentCode);
+            engineManager.TearDownEnvironment(environmentCode);
+        }
+        private void card()
+        {
+            string environmentCode = "CardGame";
+            string environmentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Env.CardGameEnv\bin\Debug";
+            engineManager.AddEnvironment(environmentCode, environmentPath);
+            engineManager.CheckStatusEnvironment(environmentCode);
+            engineManager.SetUpEnvironment(environmentCode);
+            engineManager.StartEnvironment(environmentCode);
             engineManager.StopEnvironment(environmentCode);
             engineManager.TearDownEnvironment(environmentCode);
         }
