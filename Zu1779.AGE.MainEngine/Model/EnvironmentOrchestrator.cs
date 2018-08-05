@@ -74,12 +74,34 @@
             foreach (var file in Directory.GetFiles(environmentPath, "*.*", SearchOption.AllDirectories))
                 File.Copy(file, file.Replace(environmentPath, envTargetPath));
 
+            //var adt = appDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+
+            var ad = AppDomain.CreateDomain("ProbingDomain");
+            var tunnel = (AppDomainTunnel)ad.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+            tunnel.ProbeAssemblies(envTargetPath);
+
             appDomain = createAppDomain(envTargetPath);
-            appDomain.DoCallBack(() =>
-            {
-                Assembly.ReflectionOnlyLoad()
-            });
+
             environment = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment", true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
+        }
+        private class AppDomainTunnel : MarshalByRefObject
+        {
+            public void ProbeAssemblies(string path)
+            {
+                var files = Directory.GetFiles(path);
+                foreach (var file in files)
+                {
+                    try
+                    {
+                        var asm = Assembly.LoadFile(file);
+                        var envs = asm.GetTypes().Where(c => typeof(IEnvironment).IsAssignableFrom(c));
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debugger.Break();
+                    }
+                }
+            }
         }
 
         public void AddAgent(string agentCode, string agentPath)
