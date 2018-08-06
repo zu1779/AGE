@@ -78,16 +78,17 @@
 
             var ad = AppDomain.CreateDomain("ProbingDomain");
             var tunnel = (AppDomainTunnel)ad.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
-            tunnel.ProbeAssemblies(envTargetPath);
+            var (assemblyName, typeName) = tunnel.ProbeAssemblies(envTargetPath);
+            AppDomain.Unload(ad);
 
             appDomain = createAppDomain(envTargetPath);
-
-            environment = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Environment.TestEnvironment", "Zu1779.AGE.Environment.TestEnvironment.TestEnvironment", true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
+            environment = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
         }
         private class AppDomainTunnel : MarshalByRefObject
         {
-            public void ProbeAssemblies(string path)
+            public (string assemblyName, string typeName) ProbeAssemblies(string path)
             {
+                var probedTypes = new List<Type>();
                 var files = Directory.GetFiles(path);
                 foreach (var file in files)
                 {
@@ -95,12 +96,13 @@
                     {
                         var asm = Assembly.LoadFile(file);
                         var envs = asm.GetTypes().Where(c => typeof(IEnvironment).IsAssignableFrom(c));
+                        if (envs.Any()) probedTypes.AddRange(envs);
                     }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debugger.Break();
-                    }
+                    catch (Exception) { }
                 }
+                if (!probedTypes.Any()) throw new ApplicationException("No environment found");
+                if (probedTypes.Count > 1) throw new ApplicationException("More than 1 environment found");
+                return (probedTypes[0].Assembly.FullName, probedTypes[0].FullName);
             }
         }
 

@@ -7,6 +7,12 @@
     [Serializable]
     public class CardGameEnvironment : MarshalByRefObject, IEnvironment
     {
+        public CardGameEnvironment(string code)
+        {
+            this.code = code;
+        }
+        private string code { get; }
+
         #region IEnvironment
         public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)
         {
