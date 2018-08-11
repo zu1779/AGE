@@ -6,10 +6,29 @@
 
     internal class Engine
     {
+        private Deck mace;
 
+        public void SetUp()
+        {
+            mace = new Deck();
+            mace.SetUp();
+            mace.Shuffle(20);
+
+            //TODO: setup agents
+        }
+
+        public void StartGame()
+        {
+
+        }
+
+        public void StopGame()
+        {
+
+        }
     }
 
-    internal class Mace
+    internal class Deck
     {
         private List<Card> cards { get; set; }
 

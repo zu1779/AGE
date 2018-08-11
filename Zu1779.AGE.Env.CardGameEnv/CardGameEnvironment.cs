@@ -1,8 +1,10 @@
 ﻿namespace Zu1779.AGE.Env.CardGameEnv
 {
     using System;
+    using System.Collections.Concurrent;
 
     using Zu1779.AGE.Contract;
+    using Zu1779.AGE.Env.CardGameEnv.Contract;
 
     [Serializable]
     public class CardGameEnvironment : MarshalByRefObject, IEnvironment
@@ -12,36 +14,40 @@
             this.code = code;
         }
         private string code { get; }
+        private Engine engine;
+        private ConcurrentDictionary<string, IAgentCardGame> agents { get; } = new ConcurrentDictionary<string, IAgentCardGame>();
 
         #region IEnvironment
-        public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)
+        public (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent)
         {
-            throw new NotImplementedException();
+            if (agent is IAgentCardGame) return (true, null);
+            else return (false, $"Agent doesn't implement {nameof(IAgentCardGame)}");
         }
 
-        public (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent)
+        public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)
         {
             throw new NotImplementedException();
         }
 
         public void CheckStatus()
         {
-            throw new NotImplementedException();
+            //TODO: da implementare
         }
 
         public void SetUp()
         {
-            throw new NotImplementedException();
+            engine = new Engine();
+            engine.SetUp();
         }
 
         public void TearDown()
         {
-            throw new NotImplementedException();
+            engine = null;
         }
 
         public void Start()
         {
-            throw new NotImplementedException();
+            engine.StartGame();
         }
 
         public void Continue()
@@ -61,7 +67,7 @@
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            engine.StopGame();
         }
         #endregion
     }

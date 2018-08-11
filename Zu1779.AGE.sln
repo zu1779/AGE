@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.Env.CardGameEnv"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.Env.CardGameEnv.Contract", "Zu1779.AGE.Env.CardGameEnv.Contract\Zu1779.AGE.Env.CardGameEnv.Contract.csproj", "{C2D90B10-225C-4428-B45E-73BFDE761A3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zu1779.AGE.Agent.CardGameAgent", "Zu1779.AGE.Agent.CardGameAgent\Zu1779.AGE.Agent.CardGameAgent.csproj", "{3954943F-D7E1-4213-A9A0-3384EB4101B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{C2D90B10-225C-4428-B45E-73BFDE761A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2D90B10-225C-4428-B45E-73BFDE761A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2D90B10-225C-4428-B45E-73BFDE761A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3954943F-D7E1-4213-A9A0-3384EB4101B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3954943F-D7E1-4213-A9A0-3384EB4101B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3954943F-D7E1-4213-A9A0-3384EB4101B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3954943F-D7E1-4213-A9A0-3384EB4101B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{4EC9C1E6-C6D5-4A8D-8FA9-FED505965750} = {8BD8223D-AE69-4342-8A50-6B0EBB148DB5}
 		{BBC35B95-7F13-463B-9D62-58EF503A92C0} = {4EC9C1E6-C6D5-4A8D-8FA9-FED505965750}
 		{C2D90B10-225C-4428-B45E-73BFDE761A3D} = {4EC9C1E6-C6D5-4A8D-8FA9-FED505965750}
+		{3954943F-D7E1-4213-A9A0-3384EB4101B6} = {507BB72D-5B96-4FAF-A0D4-D59D740490A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F31017-3F06-40D6-A3B9-A784AD546E9B}

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BBC35B95-7F13-463B-9D62-58EF503A92C0}</ProjectGuid>
+    <ProjectGuid>{3954943F-D7E1-4213-A9A0-3384EB4101B6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zu1779.AGE.Env.CardGameEnv</RootNamespace>
-    <AssemblyName>Zu1779.AGE.Env.CardGameEnv</AssemblyName>
+    <RootNamespace>Zu1779.AGE.Agent.CardGameAgent</RootNamespace>
+    <AssemblyName>Zu1779.AGE.Agent.CardGameAgent</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,21 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardGameEnvironment.cs" />
-    <Compile Include="Engine.cs" />
-    <Compile Include="Enum.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Zu1779.AGE.Contract\Zu1779.AGE.Contract.csproj">
-      <Project>{fa962a42-cbe0-4c11-ad37-3d06ef044bdb}</Project>
-      <Name>Zu1779.AGE.Contract</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zu1779.AGE.Env.CardGameEnv.Contract\Zu1779.AGE.Env.CardGameEnv.Contract.csproj">
-      <Project>{c2d90b10-225c-4428-b45e-73bfde761a3d}</Project>
-      <Name>Zu1779.AGE.Env.CardGameEnv.Contract</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
