@@ -9,6 +9,8 @@
     using System.Security;
     using System.Security.Permissions;
     using System.Security.Policy;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using Common.Logging;
 
@@ -27,6 +29,7 @@
         private readonly ILog log;
         private AppDomain appDomain;
         private readonly ConcurrentDictionary<string, AgentOrchestrator> agents = new ConcurrentDictionary<string, AgentOrchestrator>();
+        private Thread environmentThread;
 
         public void Dispose()
         {
@@ -84,6 +87,7 @@
             appDomain = createAppDomain(envTargetPath);
             environment = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
         }
+
         private class AppDomainTunnel : MarshalByRefObject
         {
             public (string assemblyName, string typeName) ProbeAssemblies(string path)
@@ -145,12 +149,16 @@
 
         public void Start()
         {
-            environment.Start();
+            var environmentThread = new Thread(environment.Start);
+            environmentThread.Start();
         }
 
         public void Pause()
         {
-            environment.Pause();
+            System.Diagnostics.Debugger.Break();
+            var status = environmentThread.ThreadState;
+            environmentThread.Suspend();
+            status = environmentThread.ThreadState;
         }
 
         public void Continue()

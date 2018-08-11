@@ -6,6 +6,7 @@
     using System.Reflection;
     using System.ServiceModel;
     using System.Text.RegularExpressions;
+    using System.Threading;
 
     using Common.Logging;
 
@@ -111,6 +112,7 @@
             engineManager.CheckStatusEnvironment(environmentCode);
             engineManager.SetUpEnvironment(environmentCode);
             engineManager.StartEnvironment(environmentCode);
+            engineManager.PauseEnvironment(environmentCode);
             engineManager.StopEnvironment(environmentCode);
             engineManager.TearDownEnvironment(environmentCode);
         }
