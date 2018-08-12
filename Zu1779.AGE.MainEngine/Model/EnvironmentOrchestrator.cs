@@ -135,6 +135,7 @@
                 if (agentResponse.HealthState) log.Info(agentResponse);
                 else log.Error(agentResponse);
             }
+            appDomain.MonitoringTotalProcessorTime
         }
 
         public void SetUp()
@@ -149,13 +150,12 @@
 
         public void Start()
         {
-            var environmentThread = new Thread(environment.Start);
+            environmentThread = new Thread(environment.Start);
             environmentThread.Start();
         }
 
         public void Pause()
         {
-            System.Diagnostics.Debugger.Break();
             var status = environmentThread.ThreadState;
             environmentThread.Suspend();
             status = environmentThread.ThreadState;
@@ -163,7 +163,9 @@
 
         public void Continue()
         {
-            environment.Continue();
+            var status = environmentThread.ThreadState;
+            environmentThread.Resume();
+            status = environmentThread.ThreadState;
         }
 
         public void Command(int command)

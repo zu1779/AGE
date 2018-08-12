@@ -113,6 +113,7 @@
             engineManager.SetUpEnvironment(environmentCode);
             engineManager.StartEnvironment(environmentCode);
             engineManager.PauseEnvironment(environmentCode);
+            engineManager.ContinueEnvironment(environmentCode);
             engineManager.StopEnvironment(environmentCode);
             engineManager.TearDownEnvironment(environmentCode);
         }

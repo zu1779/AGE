@@ -62,17 +62,7 @@
             engine.StartGame();
         }
 
-        public void Continue()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Command(int command)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Pause()
         {
             throw new NotImplementedException();
         }

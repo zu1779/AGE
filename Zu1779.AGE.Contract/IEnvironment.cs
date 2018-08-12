@@ -11,8 +11,6 @@
         void SetUp();
         void TearDown();
         void Start();
-        void Pause();
-        void Continue();
         void Command(int command);
         void Stop();
     }
