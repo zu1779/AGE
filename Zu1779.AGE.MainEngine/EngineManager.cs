@@ -14,6 +14,7 @@
         public EngineManager(ILog log)
         {
             this.log = log ?? throw new ArgumentNullException(nameof(log));
+            AppDomain.MonitoringIsEnabled = true;
         }
         private readonly ILog log;
 

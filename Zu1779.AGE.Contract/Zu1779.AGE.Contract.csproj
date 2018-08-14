@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentTypeEnum.cs" />
+    <Compile Include="AppDomainTunnel.cs" />
     <Compile Include="CheckStatusResponse.cs" />
     <Compile Include="IAgent.cs" />
     <Compile Include="IAgentCommunication.cs" />

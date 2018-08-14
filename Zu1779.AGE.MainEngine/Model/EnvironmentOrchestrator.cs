@@ -79,35 +79,13 @@
 
             //var adt = appDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
 
-            var ad = AppDomain.CreateDomain("ProbingDomain");
+            var ad = createAppDomain(envTargetPath);
             var tunnel = (AppDomainTunnel)ad.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
-            var (assemblyName, typeName) = tunnel.ProbeAssemblies(envTargetPath);
+            var (assemblyName, typeName) = tunnel.ProbeAssemblies(envTargetPath, typeof(IEnvironment));
             AppDomain.Unload(ad);
 
             appDomain = createAppDomain(envTargetPath);
             environment = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
-        }
-
-        private class AppDomainTunnel : MarshalByRefObject
-        {
-            public (string assemblyName, string typeName) ProbeAssemblies(string path)
-            {
-                var probedTypes = new List<Type>();
-                var files = Directory.GetFiles(path);
-                foreach (var file in files)
-                {
-                    try
-                    {
-                        var asm = Assembly.LoadFile(file);
-                        var envs = asm.GetTypes().Where(c => typeof(IEnvironment).IsAssignableFrom(c));
-                        if (envs.Any()) probedTypes.AddRange(envs);
-                    }
-                    catch (Exception) { }
-                }
-                if (!probedTypes.Any()) throw new ApplicationException("No environment found");
-                if (probedTypes.Count > 1) throw new ApplicationException("More than 1 environment found");
-                return (probedTypes[0].Assembly.FullName, probedTypes[0].FullName);
-            }
         }
 
         public void AddAgent(string agentCode, string agentPath)
@@ -135,7 +113,8 @@
                 if (agentResponse.HealthState) log.Info(agentResponse);
                 else log.Error(agentResponse);
             }
-            appDomain.MonitoringTotalProcessorTime
+            log.Info($"{nameof(appDomain.MonitoringTotalProcessorTime)}={appDomain.MonitoringTotalProcessorTime}");
+            log.Info($"{nameof(environmentThread.ThreadState)}={environmentThread.ThreadState}");
         }
 
         public void SetUp()
@@ -152,6 +131,7 @@
         {
             environmentThread = new Thread(environment.Start);
             environmentThread.Start();
+            log.Info($"{nameof(environmentThread.ThreadState)}={environmentThread.ThreadState}");
         }
 
         public void Pause()

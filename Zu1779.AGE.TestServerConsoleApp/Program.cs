@@ -80,7 +80,7 @@
             if (arrInput[0] == "exit") Console.WriteLine("Exiting");
             else if (arrInput[0] == "env") env(arrInput);
             else if (arrInput[0] == "test") test();
-            else if (arrInput[0] == "card") card();
+            else if (arrInput[0] == "card") card(arrInput);
             else Console.WriteLine("Uknown command");
         }
         private List<string> getInputArray(string input)
@@ -104,18 +104,46 @@
             engineManager.StopEnvironment(environmentCode);
             engineManager.TearDownEnvironment(environmentCode);
         }
-        private void card()
+        private void card(List<string> arrInput)
         {
             string environmentCode = "CardGame";
-            string environmentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Env.CardGameEnv\bin\Debug";
-            engineManager.AddEnvironment(environmentCode, environmentPath);
-            engineManager.CheckStatusEnvironment(environmentCode);
-            engineManager.SetUpEnvironment(environmentCode);
-            engineManager.StartEnvironment(environmentCode);
-            engineManager.PauseEnvironment(environmentCode);
-            engineManager.ContinueEnvironment(environmentCode);
-            engineManager.StopEnvironment(environmentCode);
-            engineManager.TearDownEnvironment(environmentCode);
+            if (arrInput[1] == "check")
+            {
+                engineManager.CheckStatusEnvironment(environmentCode);
+            }
+            else if (arrInput[1] == "setup")
+            {
+                string environmentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Env.CardGameEnv\bin\Debug";
+                engineManager.AddEnvironment(environmentCode, environmentPath);
+
+                string agentPath = @"C:\Progetti\A.G.E\Zu1779.AGE\Zu1779.AGE.Agent.CardGameAgent\bin\Debug";
+                engineManager.AddAgent(environmentCode, "agent001", agentPath);
+                engineManager.AddAgent(environmentCode, "agent002", agentPath);
+                engineManager.AddAgent(environmentCode, "agent003", agentPath);
+                engineManager.AddAgent(environmentCode, "agent004", agentPath);
+
+                engineManager.SetUpEnvironment(environmentCode);
+            }
+            else if (arrInput[1] == "start")
+            {
+                engineManager.StartEnvironment(environmentCode);
+            }
+            else if (arrInput[1] == "pause")
+            {
+                engineManager.PauseEnvironment(environmentCode);
+            }
+            else if (arrInput[1] == "continue")
+            {
+                engineManager.ContinueEnvironment(environmentCode);
+            }
+            else if (arrInput[1] == "stop")
+            {
+                engineManager.StopEnvironment(environmentCode);
+            }
+            else if (arrInput[1] == "teardown")
+            {
+                engineManager.TearDownEnvironment(environmentCode);
+            }
         }
         private void env(List<string> arrInput)
         {

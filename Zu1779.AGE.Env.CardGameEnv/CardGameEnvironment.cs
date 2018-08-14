@@ -31,8 +31,9 @@
         #region IEnvironment
         public (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent)
         {
-            if (agent is IAgentCardGame) return (true, null);
-            else return (false, $"Agent doesn't implement {nameof(IAgentCardGame)}");
+            if (!(agent is IAgent)) return (false, $"Agent doesn't implement {nameof(IAgent)}");
+            else if (!(agent is IAgentCardGame)) return (false, $"Agent doesn't implement {nameof(IAgentCardGame)}");
+            else return (true, null);
         }
 
         public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)

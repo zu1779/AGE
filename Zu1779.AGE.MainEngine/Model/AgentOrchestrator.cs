@@ -28,12 +28,20 @@
         private AppDomain appDomain;
         private readonly EnvironmentOrchestrator environment;
 
-        private AppDomain createAppDomain(string applicationBase)
+        private AppDomain createAppDomain(string applicationBase, bool forProbing = false)
         {
             var securityInfo = new Evidence();
             var appDomainSetup = new AppDomainSetup { ApplicationBase = applicationBase };
-            var permissionSet = new PermissionSet(PermissionState.None);
-            permissionSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
+            PermissionSet permissionSet;
+            if (forProbing)
+            {
+                permissionSet = new PermissionSet(PermissionState.Unrestricted);
+            }
+            else
+            {
+                permissionSet = new PermissionSet(PermissionState.None);
+                permissionSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
+            }
             var appDomain = AppDomain.CreateDomain(Code, securityInfo, appDomainSetup, permissionSet);
             return appDomain;
         }
@@ -62,8 +70,13 @@
             foreach (var file in Directory.GetFiles(agentPath, "*.*", SearchOption.AllDirectories))
                 File.Copy(file, file.Replace(agentPath, agentTargetPath));
 
+            var ad = createAppDomain(agentTargetPath, true);
+            var tunnel = (AppDomainTunnel)ad.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+            var (assemblyName, typeName) = tunnel.ProbeAssemblies(agentTargetPath, typeof(IAgent));
+            AppDomain.Unload(ad);
+
             appDomain = createAppDomain(agentTargetPath);
-            Agent = appDomain.CreateInstanceAndUnwrap("Zu1779.AGE.Agent.TestAgent", "Zu1779.AGE.Agent.TestAgent.TestAgent", true, BindingFlags.Default, null, new[] { Code }, null, null) as IAgent;
+            Agent = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IAgent;
         }
 
         public CheckStatusResponse CheckStatus()

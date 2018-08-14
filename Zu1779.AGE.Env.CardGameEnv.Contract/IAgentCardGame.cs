@@ -2,5 +2,6 @@
 {
     public interface IAgentCardGame
     {
+        void NextRound();
     }
 }
