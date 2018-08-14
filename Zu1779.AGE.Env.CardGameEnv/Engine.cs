@@ -6,6 +6,8 @@
 
     using log4net;
 
+    using Zu1779.AGE.Env.CardGameEnv.Contract;
+
     internal class Engine
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(Engine));
@@ -23,6 +25,7 @@
         public void StartGame()
         {
             log.Info($"{nameof(StartGame)}");
+
         }
 
         public void StopGame()
@@ -60,11 +63,5 @@
             }
             //log.Info($"Shuffled Deck:\r\n{string.Join("\r\n", cards.Select((c, i) => $"[{i}] - {c.Number} {c.Seed}"))}");
         }
-    }
-
-    internal class Card
-    {
-        public Seed Seed { get; set; }
-        public byte Number { get; set; }
     }
 }

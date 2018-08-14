@@ -2,5 +2,6 @@
 {
     public interface IEnvironmentCardGame
     {
+        void PlayCard(Card card);
     }
 }

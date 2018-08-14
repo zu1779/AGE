@@ -1,6 +1,7 @@
 ﻿namespace Zu1779.AGE.Agent.CardGameAgent
 {
     using System;
+    using System.Collections.Generic;
 
     using Zu1779.AGE.Contract;
     using Zu1779.AGE.Env.CardGameEnv.Contract;
@@ -46,10 +47,26 @@
         #endregion
 
         #region IAgentCardGame
-        public void NextRound()
+        public void InitialHand(List<Card> cards)
         {
-            throw new System.NotImplementedException();
+            hand.Clear();
+            hand.AddRange(cards);
+        }
+
+        public void CardPlayed(List<Card> previousCardsInTable, List<Card> currentCardsInTable, Card cardPlayed)
+        {
+            table.Clear();
+            table.AddRange(currentCardsInTable);
+        }
+
+        public void YourTurn(List<Card> cardsInTable)
+        {
+            table.Clear();
+            table.AddRange(cardsInTable);
         }
         #endregion
+
+        private List<Card> hand { get; } = new List<Card>();
+        private List<Card> table { get; } = new List<Card>();
     }
 }

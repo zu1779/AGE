@@ -12,7 +12,7 @@
     using Zu1779.AGE.Env.CardGameEnv.Contract;
 
     [Serializable]
-    public class CardGameEnvironment : MarshalByRefObject, IEnvironment
+    public class CardGameEnvironment : MarshalByRefObject, IEnvironment, IEnvironmentCardGame
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(CardGameEnvironment));
 
@@ -71,6 +71,13 @@
         public void Stop()
         {
             engine.StopGame();
+        }
+        #endregion
+
+        #region IEnvironmentCardGame
+        public void PlayCard(Card card)
+        {
+
         }
         #endregion
     }
