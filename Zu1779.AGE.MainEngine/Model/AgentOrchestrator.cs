@@ -91,5 +91,10 @@
                 return new CheckStatusResponse { HealthState = false, Exception = ex };
             }
         }
+
+        public void SetUp()
+        {
+            Agent.SetUp(new SetUpRequest { Environment = (IEnvironmentCommunication)environment.Environment });
+        }
     }
 }

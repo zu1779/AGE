@@ -25,37 +25,37 @@
             this.code = code;
         }
         private string code { get; }
-        private Engine engine;
-        private ConcurrentDictionary<string, IAgent> agents { get; } = new ConcurrentDictionary<string, IAgent>();
+        private readonly Engine engine = new Engine();
 
         #region IEnvironment
         public (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent)
         {
-            if (!(agent is IAgent)) return (false, $"Agent doesn't implement {nameof(IAgent)}");
-            else if (!(agent is IAgentCardGame)) return (false, $"Agent doesn't implement {nameof(IAgentCardGame)}");
+            if (!(agent is IAgentCardGame)) return (false, $"Agent doesn't implement {nameof(IAgentCardGame)}");
             else return (true, null);
         }
 
         public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)
         {
-            var added = agents.TryAdd(agentCode, agent);
-            if (!added) throw new ApplicationException($"Environment cannot add agent");
+            engine.Agents.Add(agent);
         }
 
         public void CheckStatus()
         {
-            //TODO: da implementare
+            log.Info($"Deck ({engine.Deck.Cards.Count}): {engine.Deck}");
+            log.Info($"Table ({engine.Table.Count}): {engine.Table.ToCardString()}");
+            for (byte ciclo = 0; ciclo < 4; ciclo++)
+            {
+                log.Info($"Player {ciclo + 1} ({engine.PlayerCards[ciclo].Count}): {engine.PlayerCards[ciclo].ToCardString()}");
+            }
         }
 
         public void SetUp()
         {
-            engine = new Engine();
             engine.SetUp();
         }
 
         public void TearDown()
         {
-            engine = null;
         }
 
         public void Start()
@@ -77,7 +77,7 @@
         #region IEnvironmentCardGame
         public void PlayCard(Card card)
         {
-
+            Console.WriteLine("Checkpoint");
         }
         #endregion
     }

@@ -2,9 +2,16 @@
 {
     public enum Seed
     {
-        Swords,
-        Cups,
-        Coins,
-        Clubs,
+        //Swords,
+        Spade,
+
+        //Cups,
+        Coppe,
+
+        //Coins,
+        Ori,
+
+        //Clubs,
+        Bastoni,
     }
 }

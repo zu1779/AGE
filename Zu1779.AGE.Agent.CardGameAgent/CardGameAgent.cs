@@ -12,7 +12,11 @@
         public CardGameAgent(string code)
         {
             Code = code;
+            rng = new Random();
         }
+        private readonly Random rng;
+        private IEnvironmentCommunication environment;
+        private IEnvironmentCardGame envCardGame { get { return (IEnvironmentCardGame)environment; } }
 
         #region IAgent
         public string Code { get; }
@@ -27,7 +31,7 @@
 
         public void SetUp(SetUpRequest request)
         {
-            throw new System.NotImplementedException();
+            environment = request.Environment;
         }
 
         public void Start()
@@ -63,6 +67,9 @@
         {
             table.Clear();
             table.AddRange(cardsInTable);
+
+            var cardToPlay = hand[rng.Next(hand.Count)];
+            envCardGame.PlayCard(cardToPlay);
         }
         #endregion
 

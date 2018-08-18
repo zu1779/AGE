@@ -56,30 +56,30 @@
 
         public void SetUp()
         {
-            log.Info(nameof(SetUp));
-            foreach (var agent in agents)
-            {
-                var request = new cnt.SetUpRequest { Environment = this };
-                agent.Value.SetUp(request);
-            }
+            //log.Info(nameof(SetUp));
+            //foreach (var agent in agents)
+            //{
+            //    var request = new cnt.SetUpRequest { Environment = this };
+            //    agent.Value.SetUp(request);
+            //}
         }
 
         public void TearDown()
         {
-            log.Info(nameof(TearDown));
-            foreach (var agent in agents)
-            {
-                agent.Value.TearDown();
-            }
+            //log.Info(nameof(TearDown));
+            //foreach (var agent in agents)
+            //{
+            //    agent.Value.TearDown();
+            //}
         }
 
         public void Start()
         {
-            log.Info(nameof(Start));
-            foreach (var agent in agents)
-            {
-                agent.Value.Start();
-            }
+            //log.Info(nameof(Start));
+            //foreach (var agent in agents)
+            //{
+            //    agent.Value.Start();
+            //}
         }
 
         public void Pause()
@@ -99,11 +99,11 @@
 
         public void Stop()
         {
-            log.Info(nameof(Stop));
-            foreach (var agent in agents)
-            {
-                agent.Value.Stop();
-            }
+            //log.Info(nameof(Stop));
+            //foreach (var agent in agents)
+            //{
+            //    agent.Value.Stop();
+            //}
         }
     }
 }

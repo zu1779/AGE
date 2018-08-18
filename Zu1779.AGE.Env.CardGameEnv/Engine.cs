@@ -1,31 +1,48 @@
 ﻿namespace Zu1779.AGE.Env.CardGameEnv
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
 
     using log4net;
 
+    using Zu1779.AGE.Contract;
     using Zu1779.AGE.Env.CardGameEnv.Contract;
 
     internal class Engine
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(Engine));
-        private Deck mace;
+        public Deck Deck;
+        public ConcurrentBag<IAgent> Agents { get; } = new ConcurrentBag<IAgent>();
+        public readonly Dictionary<int, List<Card>> PlayerCards = new Dictionary<int, List<Card>>()
+        {
+            [0] = new List<Card>(), [1] = new List<Card>(), [2] = new List<Card>(), [3] = new List<Card>(),
+        };
+        public List<Card> Table { get; } = new List<Card>();
 
         public void SetUp()
         {
-            mace = new Deck();
-            mace.SetUp();
-            mace.Shuffle(200);
-
+            Deck = new Deck();
+            Deck.SetUp(200);
+            for (int cycle = 0; cycle < 4; cycle++) PlayerCards[cycle].Clear();
             //TODO: setup agents
         }
 
         public void StartGame()
         {
             log.Info($"{nameof(StartGame)}");
-
+            // Distribute cards
+            for (byte cycle = 0, player = 0; cycle < 40; cycle++, player = (++player == 4 ? (byte)0 : player))
+            {
+                var card = Deck.Cards.Dequeue();
+                PlayerCards[player].Add(card);
+            }
+            for (byte cycle = 0; cycle < 4; cycle++)
+                (Agents.ElementAt(0) as IAgentCardGame).InitialHand(PlayerCards[cycle]);
+            // Start first turn
+            var firstPlayer = Agents.ElementAt(0) as IAgentCardGame;
+            firstPlayer.YourTurn(Table);
         }
 
         public void StopGame()
@@ -36,12 +53,11 @@
 
     internal class Deck
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Engine));
-        private List<Card> cards { get; set; }
+        public Queue<Card> Cards { get; set; }
 
-        public void SetUp()
+        public void SetUp(int numberOfShuffle)
         {
-            cards = new List<Card>();
+            var cards = new List<Card>();
             var seeds = Enum.GetValues(typeof(Seed)).Cast<Seed>();
             foreach (var seed in seeds)
             {
@@ -51,17 +67,17 @@
                     cards.Add(card);
                 }
             }
-            //log.Info($"Setted up Deck:\r\n{string.Join("\r\n", cards.Select((c, i) => $"[{i}] - {c.Number} {c.Seed}"))}");
-        }
-
-        public void Shuffle(int numberOfShuffle)
-        {
             Random rng = new Random();
             for (int ciclo = 0; ciclo < numberOfShuffle; ciclo++)
             {
                 cards = cards.OrderBy(c => rng.Next()).ToList();
             }
-            //log.Info($"Shuffled Deck:\r\n{string.Join("\r\n", cards.Select((c, i) => $"[{i}] - {c.Number} {c.Seed}"))}");
+            Cards = new Queue<Card>(cards);
+        }
+
+        public override string ToString()
+        {
+            return Cards.ToCardString();
         }
     }
 }

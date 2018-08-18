@@ -51,7 +51,7 @@
 
         public string Code { get; }
         public DateTimeOffset InstanceTime { get; }
-        private IEnvironment environment { get; set; }
+        public IEnvironment Environment { get; set; }
 
         /// <summary>
         /// Prepare an AppDomain for the executin of the Environment.
@@ -85,7 +85,7 @@
             AppDomain.Unload(ad);
 
             appDomain = createAppDomain(envTargetPath);
-            environment = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
+            Environment = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
         }
 
         public void AddAgent(string agentCode, string agentPath)
@@ -94,9 +94,9 @@
             agent.Prepare(agentPath);
             var added = agents.TryAdd(agentCode, agent);
             if (!added) throw new ApplicationException($"Agent {agentCode} already exists");
-            var (valid, unvalidCause) = environment.CheckAgentValidity(AgentTypeEnum.User, agent.Agent);
+            var (valid, unvalidCause) = Environment.CheckAgentValidity(AgentTypeEnum.User, agent.Agent);
             if (!valid) throw new ApplicationException($"Agent {agentCode} failed validation with environment {Code}. Cause: {unvalidCause}");
-            environment.AttachAgent(AgentTypeEnum.User, agentCode, agent.Agent);
+            Environment.AttachAgent(AgentTypeEnum.User, agentCode, agent.Agent);
         }
 
         public List<AgentOrchestrator> GetAgents()
@@ -106,7 +106,7 @@
 
         public void CheckStatus()
         {
-            environment.CheckStatus();
+            Environment.CheckStatus();
             foreach (var agent in agents)
             {
                 var agentResponse = agent.Value.CheckStatus();
@@ -119,17 +119,21 @@
 
         public void SetUp()
         {
-            environment.SetUp();
+            Environment.SetUp();
+            foreach (var agent in agents)
+            {
+                agent.Value.SetUp();
+            }
         }
 
         public void TearDown()
         {
-            environment.TearDown();
+            Environment.TearDown();
         }
 
         public void Start()
         {
-            environmentThread = new Thread(environment.Start);
+            environmentThread = new Thread(Environment.Start);
             environmentThread.Start();
             log.Info($"{nameof(environmentThread.ThreadState)}={environmentThread.ThreadState}");
         }
@@ -150,12 +154,12 @@
 
         public void Command(int command)
         {
-            environment.Command(command);
+            Environment.Command(command);
         }
 
         public void Stop()
         {
-            environment.Stop();
+            Environment.Stop();
         }
     }
 }
