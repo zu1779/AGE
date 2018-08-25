@@ -6,8 +6,13 @@
     using System.Linq;
     using System.Reflection;
 
+    using log4net;
+    using Newtonsoft.Json;
+
     public class AppDomainTunnel : MarshalByRefObject
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AppDomainTunnel));
+
         public (string assemblyName, string typeName) ProbeAssemblies(string path, Type probeType)
         {
             var probedTypes = new List<Type>();
@@ -27,18 +32,5 @@
             if (probedTypes.Count > 1) throw new ApplicationException("More than 1 environment found");
             return (probedTypes[0].Assembly.FullName, probedTypes[0].FullName);
         }
-
-        //private void resolveDependencies(Assembly assembly)
-        //{
-        //    var referenced = assembly.GetReferencedAssemblies();
-        //    if (referenced.Any())
-        //    {
-        //        foreach (var reference in referenced)
-        //        {
-        //            var asm = Assembly.Load(reference);
-        //            resolveDependencies(asm);
-        //        }
-        //    }
-        //}
     }
 }

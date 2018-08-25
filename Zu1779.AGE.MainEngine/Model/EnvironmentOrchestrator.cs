@@ -81,20 +81,13 @@
             //var adt = appDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
 
             var probeAppDomain = createAppDomain(envTargetPath);
-            var tunnel = (AppDomainTunnel)probeAppDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
-            var (assemblyName, typeName) = tunnel.ProbeAssemblies(envTargetPath, typeof(IEnvironment));
+            var probeTunnel = (AppDomainTunnel)probeAppDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+            var (assemblyName, typeName) = probeTunnel.ProbeAssemblies(envTargetPath, typeof(IEnvironment));
             AppDomain.Unload(probeAppDomain);
 
             appDomain = createAppDomain(envTargetPath);
-            appDomain.AssemblyResolve += AppDomain_AssemblyResolve;
-            Environment = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
-        }
-
-        private Assembly AppDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            log.Info($"{nameof(sender)}: {sender}");
-            log.Info($"{nameof(args)}: {JsonConvert.SerializeObject(args)}");
-            return null;
+            var tunnel = (AppDomainTunnel)appDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+            Environment = (IEnvironment)appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null);
         }
 
         public void AddAgent(string agentCode, string agentPath)
