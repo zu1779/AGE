@@ -94,7 +94,8 @@
 
         public void SetUp()
         {
-            Agent.SetUp(new SetUpRequest { Environment = (IEnvironmentCommunication)environment.Environment });
+            var setUpRequest = new SetUpRequest { Environment = (IEnvironmentCommunication)environment.Environment };
+            Agent.SetUp(setUpRequest);
         }
     }
 }

@@ -13,6 +13,7 @@
     using System.Threading.Tasks;
 
     using Common.Logging;
+    using Newtonsoft.Json;
 
     using Zu1779.AGE.Contract;
     using m = Zu1779.AGE.MainEngine.Model;
@@ -79,13 +80,21 @@
 
             //var adt = appDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
 
-            var ad = createAppDomain(envTargetPath);
-            var tunnel = (AppDomainTunnel)ad.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+            var probeAppDomain = createAppDomain(envTargetPath);
+            var tunnel = (AppDomainTunnel)probeAppDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
             var (assemblyName, typeName) = tunnel.ProbeAssemblies(envTargetPath, typeof(IEnvironment));
-            AppDomain.Unload(ad);
+            AppDomain.Unload(probeAppDomain);
 
             appDomain = createAppDomain(envTargetPath);
+            appDomain.AssemblyResolve += AppDomain_AssemblyResolve;
             Environment = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IEnvironment;
+        }
+
+        private Assembly AppDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            log.Info($"{nameof(sender)}: {sender}");
+            log.Info($"{nameof(args)}: {JsonConvert.SerializeObject(args)}");
+            return null;
         }
 
         public void AddAgent(string agentCode, string agentPath)
@@ -141,14 +150,18 @@
         public void Pause()
         {
             var status = environmentThread.ThreadState;
+#pragma warning disable CS0618 // Type or member is obsolete
             environmentThread.Suspend();
+#pragma warning restore CS0618 // Type or member is obsolete
             status = environmentThread.ThreadState;
         }
 
         public void Continue()
         {
             var status = environmentThread.ThreadState;
+#pragma warning disable CS0618 // Type or member is obsolete
             environmentThread.Resume();
+#pragma warning restore CS0618 // Type or member is obsolete
             status = environmentThread.ThreadState;
         }
 
