@@ -2,6 +2,6 @@
 {
     public interface IEnvironmentCardGame
     {
-        void PlayCard(Card card);
+        void PlayCard(string code, string token, Card card);
     }
 }

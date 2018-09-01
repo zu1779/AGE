@@ -52,6 +52,7 @@
     <Compile Include="Model\AgentOrchestrator.cs" />
     <Compile Include="Model\EnvironmentOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

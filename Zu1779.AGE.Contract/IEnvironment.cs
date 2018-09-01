@@ -5,7 +5,7 @@
     public interface IEnvironment
     {
         (bool isValid, string unvalidCause) CheckAgentValidity(AgentTypeEnum agentType, IAgent agent);
-        void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent);
+        void AttachAgent(AgentTypeEnum agentType, string agentCode, string agentToken, IAgent agent);
 
         void CheckStatus();
         void SetUp();

@@ -9,9 +9,10 @@
     [Serializable]
     public class CardGameAgent : MarshalByRefObject, IAgent, IAgentCardGame
     {
-        public CardGameAgent(string code)
+        public CardGameAgent(string code, string token)
         {
             Code = code;
+            Token = token;
             rng = new Random();
         }
         private readonly Random rng;
@@ -20,6 +21,7 @@
 
         #region IAgent
         public string Code { get; }
+        public string Token { get; }
 
         public CheckStatusResponse CheckStatus()
         {
@@ -69,7 +71,7 @@
             table.AddRange(cardsInTable);
 
             var cardToPlay = hand[rng.Next(hand.Count)];
-            envCardGame.PlayCard(cardToPlay);
+            envCardGame.PlayCard(Code, Token, cardToPlay);
         }
         #endregion
 

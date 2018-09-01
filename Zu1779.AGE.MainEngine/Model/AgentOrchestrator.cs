@@ -14,9 +14,10 @@
     [Serializable]
     public class AgentOrchestrator : IDisposable
     {
-        public AgentOrchestrator(string agentCode, EnvironmentOrchestrator environment, ILog log)
+        public AgentOrchestrator(string agentCode, string agentToken, EnvironmentOrchestrator environment, ILog log)
         {
             Code = agentCode ?? throw new ArgumentNullException(nameof(agentCode));
+            Token = agentToken;
             this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
             InstanceTime = DateTimeOffset.Now;
         }
@@ -27,6 +28,7 @@
         }
         private AppDomain appDomain;
         private readonly EnvironmentOrchestrator environment;
+        public string Token { get; }
 
         private AppDomain createAppDomain(string applicationBase, bool forProbing = false)
         {
@@ -76,7 +78,7 @@
             AppDomain.Unload(ad);
 
             appDomain = createAppDomain(agentTargetPath);
-            Agent = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null) as IAgent;
+            Agent = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code, Token }, null, null) as IAgent;
         }
 
         public CheckStatusResponse CheckStatus()

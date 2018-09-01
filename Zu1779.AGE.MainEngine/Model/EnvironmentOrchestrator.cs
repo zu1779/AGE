@@ -92,13 +92,15 @@
 
         public void AddAgent(string agentCode, string agentPath)
         {
-            var agent = new AgentOrchestrator(agentCode, this, log);
+            Utility utility = new Utility();
+            var agentToken = utility.GenerateToken();
+            var agent = new AgentOrchestrator(agentCode, agentToken, this, log);
             agent.Prepare(agentPath);
             var added = agents.TryAdd(agentCode, agent);
             if (!added) throw new ApplicationException($"Agent {agentCode} already exists");
             var (valid, unvalidCause) = Environment.CheckAgentValidity(AgentTypeEnum.User, agent.Agent);
             if (!valid) throw new ApplicationException($"Agent {agentCode} failed validation with environment {Code}. Cause: {unvalidCause}");
-            Environment.AttachAgent(AgentTypeEnum.User, agentCode, agent.Agent);
+            Environment.AttachAgent(AgentTypeEnum.User, agentCode, agentToken, agent.Agent);
         }
 
         public List<AgentOrchestrator> GetAgents()

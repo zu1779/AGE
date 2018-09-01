@@ -34,7 +34,7 @@
             else return (true, null);
         }
 
-        public void AttachAgent(AgentTypeEnum agentType, string agentCode, IAgent agent)
+        public void AttachAgent(AgentTypeEnum agentType, string agentCode, string token, IAgent agent)
         {
             engine.Agents.Add(agent);
         }
@@ -75,9 +75,9 @@
         #endregion
 
         #region IEnvironmentCardGame
-        public void PlayCard(Card card)
+        public void PlayCard(string code, string token, Card card)
         {
-            Console.WriteLine("Checkpoint");
+            
         }
         #endregion
     }
