@@ -24,6 +24,7 @@
             log4net.Config.XmlConfigurator.Configure(fileInfo);
             this.code = code;
         }
+        private readonly object agentsLock = new object();
         private string code { get; }
         private readonly Engine engine = new Engine();
 
@@ -36,7 +37,10 @@
 
         public void AttachAgent(AgentTypeEnum agentType, string agentCode, string token, IAgent agent)
         {
-            engine.Agents.Add(agent);
+            lock (agentsLock)
+            {
+                engine.Agents.Add(agent);
+            }
         }
 
         public void CheckStatus()
@@ -77,7 +81,7 @@
         #region IEnvironmentCardGame
         public void PlayCard(string code, string token, Card card)
         {
-            
+            engine.PlayCard(code, token, card);
         }
         #endregion
     }

@@ -77,11 +77,14 @@
         private void executeInput(string input)
         {
             var arrInput = getInputArray(input);
-            if (arrInput[0] == "exit") Console.WriteLine("Exiting");
-            else if (arrInput[0] == "env") env(arrInput);
-            else if (arrInput[0] == "test") test();
-            else if (arrInput[0] == "card") card(arrInput);
-            else Console.WriteLine("Uknown command");
+            if (arrInput.Any())
+            {
+                if (arrInput[0] == "exit") Console.WriteLine("Exiting");
+                else if (arrInput[0] == "env") env(arrInput);
+                else if (arrInput[0] == "test") test();
+                else if (arrInput[0] == "card") card(arrInput);
+                else Console.WriteLine("Uknown command");
+            }
         }
         private List<string> getInputArray(string input)
         {

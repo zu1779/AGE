@@ -16,6 +16,7 @@
         private cnt.IEnvironmentCommunication environment;
 
         public string Code { get; }
+        public string Token { get; set; }
 
         public cnt.CheckStatusResponse CheckStatus()
         {

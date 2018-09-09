@@ -72,6 +72,7 @@
 
             var cardToPlay = hand[rng.Next(hand.Count)];
             envCardGame.PlayCard(Code, Token, cardToPlay);
+            hand.Remove(cardToPlay);
         }
         #endregion
 

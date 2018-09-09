@@ -2,7 +2,8 @@
   <log4net>
     <appender name="ConsoleAppender" type="log4net.Appender.ColoredConsoleAppender">
       <layout type="log4net.Layout.PatternLayout">
-        <conversionPattern value="%date %level [%thread] %logger{1} %username - %message%newline" />
+        <!--<conversionPattern value="%date %level [%thread] %logger{1} %username - %message%newline" />-->
+        <conversionPattern value="%date - %message%newline" />
       </layout>
       <mapping>
         <level value="DEBUG" />

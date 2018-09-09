@@ -118,7 +118,7 @@
                 else log.Error(agentResponse);
             }
             log.Info($"{nameof(appDomain.MonitoringTotalProcessorTime)}={appDomain.MonitoringTotalProcessorTime}");
-            log.Info($"{nameof(environmentThread.ThreadState)}={environmentThread.ThreadState}");
+            log.Info($"{nameof(environmentThread.ThreadState)}={environmentThread?.ThreadState}");
         }
 
         public void SetUp()
