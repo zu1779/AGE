@@ -9,7 +9,7 @@
         Coppe,
 
         //Coins,
-        Ori,
+        Denari,
 
         //Clubs,
         Bastoni,

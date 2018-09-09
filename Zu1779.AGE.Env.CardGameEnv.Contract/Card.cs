@@ -22,7 +22,7 @@
         public static string ToCardString(this IEnumerable<Card> cards)
         {
             //return string.Join(", ", cards.Select(c => $"{c.Number} {c.Seed}"));
-            return string.Join(", ", cards.Select(c => $"{c.Number} {c.Seed.ToString()[0]}"));
+            return string.Join(", ", cards.OrderBy(c => c.Seed).ThenBy(c => c.Number).Select(c => $"{c.Number} {c.Seed.ToString()[0]}"));
         }
     }
 }
