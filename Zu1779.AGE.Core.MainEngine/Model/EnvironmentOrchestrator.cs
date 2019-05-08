@@ -12,8 +12,8 @@
     using log = NLog;
     using Newtonsoft.Json;
 
-    using Zu1779.AGE.Contract;
-    using m = Zu1779.AGE.MainEngine.Model;
+    using Contract;
+    using m = MainEngine.Model;
 
     [Serializable]
     public class EnvironmentOrchestrator : IDisposable
@@ -38,12 +38,13 @@
             }
         }
 
-        private AppDomain createAppDomain(string applicationBase)
+        private AppDomain CreateAppDomain(string applicationBase)
         {
-            var securityInfo = new Evidence();
-            var appDomainSetup = new AppDomainSetup { ApplicationBase = applicationBase };
-            var permissionSet = new PermissionSet(PermissionState.Unrestricted);
-            var appDomain = AppDomain.CreateDomain(Code, securityInfo, appDomainSetup, permissionSet);
+            //var securityInfo = new Evidence();
+            //var appDomainSetup = new AppDomainSetup { ApplicationBase = applicationBase };
+            //var permissionSet = new PermissionSet(PermissionState.Unrestricted);
+            //var appDomain = AppDomain.CreateDomain(Code, securityInfo, appDomainSetup, permissionSet);
+            var appDomain = AppDomain.CreateDomain(Code);
             return appDomain;
         }
 
@@ -77,21 +78,21 @@
 
             //var adt = appDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
 
-            var probeAppDomain = createAppDomain(envTargetPath);
-            var probeTunnel = (AppDomainTunnel)probeAppDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
-            var (assemblyName, typeName) = probeTunnel.ProbeAssemblies(envTargetPath, typeof(IEnvironment));
+            var probeAppDomain = CreateAppDomain(envTargetPath);
+            //var probeTunnel = (AppDomainTunnel)probeAppDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+            //var (assemblyName, typeName) = probeTunnel.ProbeAssemblies(envTargetPath, typeof(IEnvironment));
             AppDomain.Unload(probeAppDomain);
 
-            appDomain = createAppDomain(envTargetPath);
-            var tunnel = (AppDomainTunnel)appDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
-            Environment = (IEnvironment)appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null);
+            appDomain = CreateAppDomain(envTargetPath);
+            //var tunnel = (AppDomainTunnel)appDomain.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+            //Environment = (IEnvironment)appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code }, null, null);
         }
 
         public void AddAgent(string agentCode, string agentPath)
         {
             Utility utility = new Utility();
             var agentToken = utility.GenerateToken();
-            var agent = new AgentOrchestrator(agentCode, agentToken, this, log);
+            var agent = new AgentOrchestrator(agentCode, agentToken, this, logger);
             agent.Prepare(agentPath);
             var added = agents.TryAdd(agentCode, agent);
             if (!added) throw new ApplicationException($"Agent {agentCode} already exists");
@@ -111,11 +112,11 @@
             foreach (var agent in agents)
             {
                 var agentResponse = agent.Value.CheckStatus();
-                if (agentResponse.HealthState) log.Info(agentResponse);
-                else log.Error(agentResponse);
+                if (agentResponse.HealthState) logger.Info(agentResponse);
+                else logger.Error(agentResponse);
             }
-            log.Info($"{nameof(appDomain.MonitoringTotalProcessorTime)}={appDomain.MonitoringTotalProcessorTime}");
-            log.Info($"{nameof(environmentThread.ThreadState)}={environmentThread?.ThreadState}");
+            logger.Info($"{nameof(appDomain.MonitoringTotalProcessorTime)}={appDomain.MonitoringTotalProcessorTime}");
+            logger.Info($"{nameof(environmentThread.ThreadState)}={environmentThread?.ThreadState}");
         }
 
         public void SetUp()
@@ -136,7 +137,7 @@
         {
             environmentThread = new Thread(Environment.Start);
             environmentThread.Start();
-            log.Info($"{nameof(environmentThread.ThreadState)}={environmentThread.ThreadState}");
+            logger.Info($"{nameof(environmentThread.ThreadState)}={environmentThread.ThreadState}");
         }
 
         public void Pause()

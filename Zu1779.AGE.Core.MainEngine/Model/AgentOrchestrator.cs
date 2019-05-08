@@ -3,18 +3,15 @@
     using System;
     using System.IO;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
-    using System.Security.Policy;
 
-    using Common.Logging;
+    using log = NLog;
 
-    using Zu1779.AGE.Contract;
+    using Contract;
 
     [Serializable]
     public class AgentOrchestrator : IDisposable
     {
-        public AgentOrchestrator(string agentCode, string agentToken, EnvironmentOrchestrator environment, ILog log)
+        public AgentOrchestrator(string agentCode, string agentToken, EnvironmentOrchestrator environment, log.ILogger logger)
         {
             Code = agentCode ?? throw new ArgumentNullException(nameof(agentCode));
             Token = agentToken;
@@ -32,19 +29,19 @@
 
         private AppDomain createAppDomain(string applicationBase, bool forProbing = false)
         {
-            var securityInfo = new Evidence();
-            var appDomainSetup = new AppDomainSetup { ApplicationBase = applicationBase };
-            PermissionSet permissionSet;
-            if (forProbing)
-            {
-                permissionSet = new PermissionSet(PermissionState.Unrestricted);
-            }
-            else
-            {
-                permissionSet = new PermissionSet(PermissionState.None);
-                permissionSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
-            }
-            var appDomain = AppDomain.CreateDomain(Code, securityInfo, appDomainSetup, permissionSet);
+            //var securityInfo = new Evidence();
+            //var appDomainSetup = new AppDomainSetup { ApplicationBase = applicationBase };
+            //PermissionSet permissionSet;
+            //if (forProbing)
+            //{
+            //    permissionSet = new PermissionSet(PermissionState.Unrestricted);
+            //}
+            //else
+            //{
+            //    permissionSet = new PermissionSet(PermissionState.None);
+            //    permissionSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
+            //}
+            var appDomain = AppDomain.CreateDomain(Code/*, securityInfo, appDomainSetup, permissionSet*/);
             return appDomain;
         }
 
@@ -73,12 +70,12 @@
                 File.Copy(file, file.Replace(agentPath, agentTargetPath));
 
             var ad = createAppDomain(agentTargetPath, true);
-            var tunnel = (AppDomainTunnel)ad.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
-            var (assemblyName, typeName) = tunnel.ProbeAssemblies(agentTargetPath, typeof(IAgent));
+            //var tunnel = (AppDomainTunnel)ad.CreateInstanceAndUnwrap(typeof(AppDomainTunnel).Assembly.FullName, typeof(AppDomainTunnel).FullName);
+            //var (assemblyName, typeName) = tunnel.ProbeAssemblies(agentTargetPath, typeof(IAgent));
             AppDomain.Unload(ad);
 
             appDomain = createAppDomain(agentTargetPath);
-            Agent = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code, Token }, null, null) as IAgent;
+            //Agent = appDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.Default, null, new[] { Code, Token }, null, null) as IAgent;
         }
 
         public CheckStatusResponse CheckStatus()
