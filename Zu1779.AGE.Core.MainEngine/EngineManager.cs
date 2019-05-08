@@ -11,9 +11,9 @@
 
     public class EngineManager : IDisposable
     {
-        public EngineManager(log.ILogger logger)
+        public EngineManager()
         {
-            this.logger = logger;
+            this.logger = log.LogManager.GetCurrentClassLogger();
             AppDomain.MonitoringIsEnabled = true;
         }
         private readonly log.ILogger logger;
