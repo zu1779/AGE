@@ -21,12 +21,12 @@
         {
             log4net.Config.XmlConfigurator.Configure();
 
-            //log.Trace(c => c("TRACE"));
-            //log.Debug(c => c("DEBUG"));
-            //log.Info(c => c("INFO"));
-            //log.Warn(c => c("WARN"));
-            //log.Error(c => c("ERROR"));
-            //log.Fatal(c => c("FATAL"));
+            log.Trace(c => c("TRACE"));
+            log.Debug(c => c("DEBUG"));
+            log.Info(c => c("INFO"));
+            log.Warn(c => c("WARN"));
+            log.Error(c => c("ERROR"));
+            log.Fatal(c => c("FATAL"));
             //Console.ReadKey();
             //return;
 
@@ -47,7 +47,7 @@
             ILog logEngineManager = LogManager.GetLogger<EngineManager>();
             using (engineManager = new EngineManager(logEngineManager))
             {
-                startWcfInterface();
+                StartWcfInterface();
 
                 string input = null;
                 while (input != "exit")
@@ -62,7 +62,7 @@
                     else input = Console.ReadLine().ToLower();
                     try
                     {
-                        executeInput(input);
+                        ExecuteInput(input);
                     }
                     catch (Exception ex)
                     {
@@ -70,33 +70,33 @@
                     }
                 }
 
-                stopWcfInterface();
+                StopWcfInterface();
             }
         }
 
-        private void executeInput(string input)
+        private void ExecuteInput(string input)
         {
-            var arrInput = getInputArray(input);
+            var arrInput = GetInputArray(input);
             if (arrInput.Any())
             {
                 if (arrInput[0] == "exit") Console.WriteLine("Exiting");
-                else if (arrInput[0] == "test") test();
+                else if (arrInput[0] == "test") Test();
                 else if (arrInput.Skip(1).Any())
                 {
-                    if (arrInput[0] == "env") env(arrInput);
-                    else if (arrInput[0] == "card") card(arrInput);
+                    if (arrInput[0] == "env") Env(arrInput);
+                    else if (arrInput[0] == "card") Card(arrInput);
                     else Console.WriteLine("Uknown command");
                 }
                 else Console.WriteLine($"Not enough parameters for '{arrInput[0]}' command");
             }
         }
-        private List<string> getInputArray(string input)
+        private List<string> GetInputArray(string input)
         {
             Regex regex = new Regex(@"((""((?<token>.*?)(?<!\\)"")|(?<token>[\w]+))(\s)*)");
             var result = regex.Matches(input).Cast<Match>().Where(c => c.Groups["token"].Success).Select(c => c.Groups["token"].Value).ToList();
             return result;
         }
-        private void test()
+        private void Test()
         {
             string environmentCode = "test";
             string environmentPath = @"H:\Progetti\AGE\Zu1779.AGE.Environment.TestEnvironment\bin\Debug";
@@ -111,7 +111,7 @@
             engineManager.StopEnvironment(environmentCode);
             engineManager.TearDownEnvironment(environmentCode);
         }
-        private void card(List<string> arrInput)
+        private void Card(List<string> arrInput)
         {
             string environmentCode = "CardGame";
             if (arrInput[1] == "check")
@@ -153,7 +153,7 @@
             }
             else Console.WriteLine($"Unknown command: {string.Join(" ", arrInput)}");
         }
-        private void env(List<string> arrInput)
+        private void Env(List<string> arrInput)
         {
             if (arrInput.Count < 2) throw new ApplicationException("Too few parameters. Usage: env [add|list] [<environment name>]");
             if (arrInput[1] == "add")
@@ -173,7 +173,7 @@
         }
 
         #region WCF
-        private void startWcfInterface()
+        private void StartWcfInterface()
         {
             log.Info($"Starting WCF Interface");
             var ageWcfService = new AgeWcfService(engineManager);
@@ -182,7 +182,7 @@
             log.Info($"Started WCF Interface");
         }
 
-        private void stopWcfInterface()
+        private void StopWcfInterface()
         {
             log.Info($"Stopping WCF Interface");
             if (serviceHost != null)
