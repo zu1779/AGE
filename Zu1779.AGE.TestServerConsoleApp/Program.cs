@@ -171,7 +171,7 @@
                 else Console.WriteLine("No environment yet");
             }
         }
-
+        
         #region WCF
         private void StartWcfInterface()
         {
