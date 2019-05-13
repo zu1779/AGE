@@ -4,11 +4,12 @@
     using System.Reflection;
     using System.ServiceModel;
 
+    using Newtonsoft.Json;
+
     using Zu1779.AGE.MainEngine;
 
-    [ServiceContract]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class AgeWcfService
+    public class AgeWcfService : IAgeWcfService
     {
         public AgeWcfService(EngineManager engineManager)
         {
@@ -16,12 +17,14 @@
         }
         private readonly EngineManager engineManager;
 
-        [OperationContract]
         public string GetVersion()
         {
             return Assembly.GetEntryAssembly().GetName().ToString();
         }
 
-
+        public object ExecuteCommand(string inputCommand)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

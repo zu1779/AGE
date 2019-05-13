@@ -46,10 +46,6 @@
     <Compile Include="TestAgent.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zu1779.AGE.Contract\Zu1779.AGE.Contract.csproj">
-      <Project>{fa962a42-cbe0-4c11-ad37-3d06ef044bdb}</Project>
-      <Name>Zu1779.AGE.Contract</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Zu1779.AGE.Env.TestEnv.Contract\Zu1779.AGE.Env.TestEnv.Contract.csproj">
       <Project>{261768b6-0fa9-4b82-b81a-0d5501f7008b}</Project>
       <Name>Zu1779.AGE.Env.TestEnv.Contract</Name>
