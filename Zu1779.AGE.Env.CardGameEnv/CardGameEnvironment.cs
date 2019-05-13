@@ -9,7 +9,7 @@
     using log4net;
 
     using Zu1779.AGE.Contract;
-    using Zu1779.AGE.Env.CardGameEnv.Contract;
+    using Zu1779.AGE.Environment.CardGame.Contract;
 
     [Serializable]
     public class CardGameEnvironment : MarshalByRefObject, IEnvironment, IEnvironmentCommunication, IEnvironmentCardGame

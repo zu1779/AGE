@@ -1,18 +1,5 @@
-﻿namespace Zu1779.AGE.TestServerConsoleApp
+﻿namespace Zu1779.AGE.TestConsole
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.ServiceModel;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-
-    using Common.Logging;
-
-    using Zu1779.AGE.MainEngine;
-    using Zu1779.AGE.Wcf;
-
     class Program
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
@@ -171,7 +158,7 @@
                 else Console.WriteLine("No environment yet");
             }
         }
-        
+
         #region WCF
         private void StartWcfInterface()
         {

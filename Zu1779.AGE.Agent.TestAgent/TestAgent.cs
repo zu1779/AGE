@@ -1,7 +1,6 @@
 ﻿namespace Zu1779.AGE.Agent.TestAgent
 {
     using System;
-    using System.Reflection;
 
     using cnt = Zu1779.AGE.Contract;
     using envcnt = Zu1779.AGE.Environment.TestEnvironment.Contract;

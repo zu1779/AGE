@@ -1,10 +1,10 @@
-﻿namespace Zu1779.AGE.Agent.CardGameAgent
+﻿namespace Zu1779.AGE.Agent.CardGame
 {
     using System;
     using System.Collections.Generic;
 
     using Zu1779.AGE.Contract;
-    using Zu1779.AGE.Env.CardGameEnv.Contract;
+    using Zu1779.AGE.Environment.CardGame.Contract;
 
     [Serializable]
     public class CardGameAgent : MarshalByRefObject, IAgent, IAgentCardGame
@@ -17,7 +17,7 @@
         }
         private readonly Random rng;
         private IEnvironmentCommunication environment;
-        private IEnvironmentCardGame envCardGame { get { return (IEnvironmentCardGame)environment; } }
+        private IEnvironmentCardGame EnvCardGame { get { return (IEnvironmentCardGame)environment; } }
 
         #region IAgent
         public string Code { get; }
@@ -55,28 +55,28 @@
         #region IAgentCardGame
         public void InitialHand(List<Card> cards)
         {
-            hand.Clear();
-            hand.AddRange(cards);
+            Hand.Clear();
+            Hand.AddRange(cards);
         }
 
         public void CardPlayed(List<Card> previousCardsInTable, List<Card> currentCardsInTable, Card cardPlayed)
         {
-            table.Clear();
-            table.AddRange(currentCardsInTable);
+            Table.Clear();
+            Table.AddRange(currentCardsInTable);
         }
 
         public void YourTurn(List<Card> cardsInTable)
         {
-            table.Clear();
-            table.AddRange(cardsInTable);
+            Table.Clear();
+            Table.AddRange(cardsInTable);
 
-            var cardToPlay = hand[rng.Next(hand.Count)];
-            envCardGame.PlayCard(Code, Token, cardToPlay);
-            hand.Remove(cardToPlay);
+            var cardToPlay = Hand[rng.Next(Hand.Count)];
+            EnvCardGame.PlayCard(Code, Token, cardToPlay);
+            Hand.Remove(cardToPlay);
         }
         #endregion
 
-        private List<Card> hand { get; } = new List<Card>();
-        private List<Card> table { get; } = new List<Card>();
+        private List<Card> Hand { get; } = new List<Card>();
+        private List<Card> Table { get; } = new List<Card>();
     }
 }

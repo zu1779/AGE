@@ -56,5 +56,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zu1779.AGE.Contract\Zu1779.AGE.Contract.csproj">
+      <Project>{c6b297da-ddf2-4495-9911-c274d5742b9c}</Project>
+      <Name>Zu1779.AGE.Contract</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Zu1779.AGE.Agent.CardGame</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Zu1779.AGE.Contract\Zu1779.AGE.Contract.csproj" />
-    <ProjectReference Include="..\Zu1779.AGE.Env.TestEnv.Contract\Zu1779.AGE.Env.TestEnv.Contract.csproj" />
+    <ProjectReference Include="..\Zu1779.AGE.Environment.CardGame.Contract\Zu1779.AGE.Environment.CardGame.Contract.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Zu1779.AGE.Env.CardGameEnv.Contract
+﻿namespace Zu1779.AGE.Environment.CardGame.Contract
 {
     using System.Collections.Generic;
 
